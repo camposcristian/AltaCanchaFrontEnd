@@ -2,7 +2,6 @@
 *~
 build/
 /www/
-vendor/
 node_modules/
 .idea
 .sass-cache/
