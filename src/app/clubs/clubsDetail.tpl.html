@@ -14,16 +14,58 @@
             <i class="icon ion-location"></i>
         </button>
     </ion-header-bar>
-    <ion-content scroll="false">
+    <ion-content has-bouncing="true">
         <div class="search-box">
-            <h2 class="title">Buscar canchas</h2>
+            <h1 class="padding">Buscar canchas</h1>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="date" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <div class="item item-input item-select">
+                        <div class="input-label">
+                            Horario
+                        </div>
+                        <select class="" name="hourPicker" id="hourPicker">
+                            <option ng-repeat="t in [1,2,3,4]" value="{{t}}">{{t}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="text" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <button class="button button-full">
+                        Buscar
+                    </button>
+                </div>
+            </div>
         </div>
-        <!--<ion-list>
-            <ion-item ng-repeat="task in activeProject.tasks">
-                {{task.title}}
-            </ion-item>
-        </ion-list>-->
-        <div class="col50">asd</div>
-        <div class="col50">asd</div>
+
+
+        <div>
+            <h4>CANCHA_NOMBRE</h4>
+
+                <div class="tabs tabs-canchas">
+                <a class="tab-item">
+                    Cancha #1
+                </a>
+                <a class="tab-item">
+                    Cancha #2
+                </a>
+                <a class="tab-item">
+                    Cancha #3
+                </a>
+                <a class="tab-item">
+                    Cancha #4
+                </a>
+            </div>
+        </div>
     </ion-content>
 </ion-side-menu-content>
