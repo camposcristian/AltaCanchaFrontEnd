@@ -18,11 +18,13 @@ angular.module('alta-cancha-app', [
 
     .config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
         //$locationProvider.html5Mode(true);
-        $urlRouterProvider.otherwise("/clubs/home");
+        $urlRouterProvider.otherwise("/user/login");
     }])
 
-    .controller('AppController', function ($scope) {
-
+    .controller('AppController', function ($scope, $ionicSideMenuDelegate) {
+        $scope.toggleSideBar = function () {
+            $ionicSideMenuDelegate.toggleLeft();
+        };
     });
 
 
