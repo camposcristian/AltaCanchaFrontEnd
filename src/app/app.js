@@ -2,6 +2,9 @@ angular.module('alta-cancha-app', [
         'ionic',
         'ngCordova',
 
+        'ngStorage',
+        'ezfb',
+
         'templates-app',
         'templates-common',
 
