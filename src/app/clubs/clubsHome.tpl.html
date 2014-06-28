@@ -16,15 +16,44 @@
     </ion-header-bar>
     <ion-content has-bouncing="true">
         <div class="search-box">
-            <h2 class="title">Buscar canchas</h2>
+            <h1 class="padding">Buscar canchas</h1>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="date" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <div class="item item-input item-select">
+                        <div class="input-label">
+                            Horario
+                        </div>
+                        <select class="" name="hourPicker" id="hourPicker">
+                            <option ng-repeat="t in [1,2,3,4]" value="{{t}}">{{t}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="text" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <button class="button button-full button-positive">
+                        Buscar
+                    </button>
+                </div>
+            </div>
         </div>
         <div class="padding-horizontal">
-                <h4>Últimas reservas</h4>
+            <h4>Últimas reservas</h4>
         </div>
         <ul class="list-canchas">
 
             <a ng-repeat="t in [1,2,3,4,5]" href="#" class="item-cancha">
-                <img class="item-cancha-img" src="http://3.bp.blogspot.com/_-_iY2J8OkP0/TGf9R71YbwI/AAAAAAAACRE/CaSXe3yz-oY/s320/gol+teso.JPG" alt="CANCHA_NOMBRE"/>
+                <img class="item-cancha-img" src="assets/img/canchas/cancha-1-thumb-1.jpg" alt="CANCHA_NOMBRE"/>
                 <div class="item-cancha-overlay">
                     <h5 class="nombre padding-horizontal">NOMBRE_CANCHA</h5>
                     <h6 class="direccion padding-horizontal" >DIRECCION_CANCHA</h6>
