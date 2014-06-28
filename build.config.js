@@ -35,7 +35,7 @@ module.exports = {
         scss: 'src/scss/main.scss'
     },
 
-    config_file: "ionic-ng-boilerplate-config",
+    config_file: "alta-canchac",
 
     exclude_files: {
         js: [ '!build/src/app/config.js']

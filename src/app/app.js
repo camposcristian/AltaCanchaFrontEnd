@@ -1,4 +1,4 @@
-angular.module('boilerplate-app', [
+angular.module('alta-cancha-app', [
         'ionic',
         'ngCordova',
 
