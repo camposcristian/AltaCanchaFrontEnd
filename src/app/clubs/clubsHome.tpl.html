@@ -1,14 +1,18 @@
 <!-- Center content -->
 <ion-side-menu-content>
-    <ion-header-bar class="bar-dark">
-        <button class="button button-icon" ng-click="toggleSideBar()">
+    <ion-header-bar class="bar-dark bar-altacancha">
+        <button class="button button-icon menu-icon" ng-click="toggleSideBar()">
             <i class="icon ion-navicon"></i>
         </button>
-        <h1 class="title">Buscar</h1>
+        <img src="http://iconos.gratis.es/iconos/deportes/balones-y-pelotas/futbol.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()" />
+        <h1 class="title">Alta cancha</h1>
         <!-- New Task button-->
-        <!--<button class="button button-icon" ng-click="newTask()">
-            <i class="icon ion-compose"></i>
-        </button>-->
+        <button class="button button-icon button-search" ng-click="newTask()">
+            <i class="icon ion-search"></i>
+        </button>
+        <button class="button button-icon" ng-click="newTask()">
+            <i class="icon ion-location"></i>
+        </button>
     </ion-header-bar>
     <ion-content scroll="false">
         <!--<ion-list>

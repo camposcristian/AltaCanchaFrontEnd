@@ -5,3 +5,5 @@ build/
 vendor/
 node_modules/
 .idea
+.sass-cache/
+platforms/
