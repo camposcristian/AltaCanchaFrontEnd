@@ -1,6 +1,7 @@
 angular.module('alta-cancha-app', [
         'ionic',
         'ngCordova',
+        'ngResource',
 
         'ngStorage',
         'ezfb',
@@ -16,6 +17,12 @@ angular.module('alta-cancha-app', [
     .run(function ($ionicPlatform, $cordovaSplashscreen) {
         $ionicPlatform.ready(function () {
             $cordovaSplashscreen.hide();
+        });
+    })
+
+    .config(function (ezfbProvider, FB_APP_ID) {
+        ezfbProvider.setInitParams({
+            appId: FB_APP_ID
         });
     })
 

@@ -72,6 +72,7 @@ module.exports = {
         js: [
             'vendor/ionic/js/ionic.bundle.js',
             'vendor/ngCordova/dist/ng-cordova.js',
+            'vendor/angular/angular-resource.js',
 
             'vendor/ngstorage/ngStorage.min.js',
             'vendor/angular-easyfb/angular-easyfb.js'

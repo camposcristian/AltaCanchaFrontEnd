@@ -6,24 +6,23 @@ angular.module('userModule').config(['$stateProvider', function ($stateProvider)
     });
 }]);
 
-angular.module('userModule').controller('LoginController', function ($scope) {
+angular.module('userModule').controller('LoginController',["$scope", "ezfb", "Users", "$q", function ($scope, ezfb, Users, $q) {
 
     $scope.fbLogin = function () {
-        return ezfb.login(null, {scope: 'email,user_likes'}).then(function (response) {
-            //console.log(response);
+        ezfb.login(null, {scope: 'email,user_likes'}).then(function (response) {
+            console.log(response);
             var user = new Users();
-            //console.log(user);
+            console.log(user);
             user.fbId = response.authResponse.userID;
             user.fbToken = response.authResponse.accessToken;
 
             deferred = $q.defer();
             user.$fbLogin().then(
-                handleSuccessLogin,
-                handleErrorLogin
+                alert("true"),
+                alert("false")
             );
-            return deferred.promise;
         });
     };
 
-});
+}]);
 

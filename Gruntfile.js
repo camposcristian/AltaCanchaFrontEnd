@@ -662,7 +662,7 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'clean:compile', 'less:compile', 'sass:compile', 'concat:build_css', 'clean:aux', 'copy:compile_htaccess', 'copy:compile_php', 'copy:compile_config', 'copy:compile_assets', 'ngmin', 'concat:compile_js', 'uglify', 'index:compile'
+    'clean:compile', 'less:compile', 'sass:compile', 'concat:build_css', 'clean:aux', 'copy:compile_htaccess', 'copy:compile_php', 'copy:compile_config', 'copy:compile_assets', 'ngmin', 'concat:compile_js'/*, 'uglify'*/, 'index:compile'
   ]);
 
   /**
