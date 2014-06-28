@@ -1,5 +1,5 @@
 <!-- Left menu -->
-<ion-side-menu side="left">
+<ion-side-menu ng-controller="sidebarController" side="left">
     <ion-header-bar class="bar-dark">
         <h1 class="title">Sidebar</h1>
         <!--<button class="button button-icon ion-plus" ng-click="newProject()">
@@ -10,15 +10,18 @@
             <!--<ion-item ng-repeat="project in projects" ng-click="selectProject(project, $index)" ng-class="{active: activeProject == project}">
                 {{project.title}}
             </ion-item>-->
-            <ion-item>
-                Side 1
+            <ion-item ng-repeat="item in items" ui-sref-active="active" ui-sref="{{item.state}}">
+                {{item.name}}
             </ion-item>
-            <ion-item>
-                Side 2
+            <!--<ion-item ui-sref-active="active" ui-sref="userHome">
+                Perfil
             </ion-item>
-            <ion-item>
-                Side 3
+            <ion-item ui-sref-active="active" ui-sref="clubsHome">
+                Tus Partidos
             </ion-item>
+            <ion-item ui-sref-active="active" ui-sref="userHome">
+                Canchas Favoritas
+            </ion-item>-->
         </ion-list>
     </ion-content>
 </ion-side-menu>

@@ -5,7 +5,8 @@ angular.module('alta-cancha-app', [
         'templates-app',
         'templates-common',
 
-        'homeModule'
+        'sidebarModule',
+        'clubsModule'
     ])
 
     .run(function ($ionicPlatform, $cordovaSplashscreen) {
@@ -16,7 +17,7 @@ angular.module('alta-cancha-app', [
 
     .config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
         //$locationProvider.html5Mode(true);
-        $urlRouterProvider.otherwise("/home");
+        $urlRouterProvider.otherwise("/clubs/home");
     }])
 
     .controller('AppController', function ($scope) {
