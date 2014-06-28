@@ -6,3 +6,42 @@
     border: 1px solid #eee;
   }
 }
+
+.cancha-horarios {
+  text-align: center;
+
+  .col {
+    background: #fff;
+    border: 1px solid #eee;
+    background: fadeout(@verdeMain, 40%);
+    border: 1px solid @verdeMain;
+    color: @fontColorBase;
+    box-sizing: border-box;
+  }
+
+  .taken {
+    background: fadeout(red, 40%);
+    border: 1px solid red;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+  }
+
+  .active {
+    background: fadeout(#333, 40%);
+    border: 1px solid #333;
+    color: #fff;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+  }
+}
+
+.cancha-reservar {
+  button {
+    background: @verdeMain !important;
+    color: #fff !important;
+    border-color: @fontColorBase !important;
+
+    &:hover {
+      color: #fff !important;
+    }
+  }
+}
