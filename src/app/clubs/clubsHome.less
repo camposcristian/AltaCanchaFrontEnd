@@ -1,0 +1,47 @@
+.list-canchas {
+  margin-top: 0;
+
+  .item-cancha {
+    display: block;
+    margin: 0 0 1px;
+    position: relative;
+
+    .item-cancha-img {
+      width: 100%;
+      height: auto;
+    }
+
+    .item-cancha-overlay {
+      background: rgba(0,0,0,0.5);
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      color: #fff;
+
+      h1,h2,h3,h4,h5,h6 {
+        color: #fff;
+      }
+
+      .nombre {
+        margin-bottom: 5px;
+      }
+
+      .direccion {
+        margin-top: 5px;
+      }
+
+      .precio {
+        position: absolute;
+        bottom: 10px;
+        right: 10px;
+        background: @verdeMain;
+        padding: 5px;
+        font-size: 15px;
+        line-height: 1;
+        color: @fontColorBase;
+      }
+    }
+  }
+}

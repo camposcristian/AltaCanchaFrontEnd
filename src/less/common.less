@@ -1,5 +1,19 @@
+@verdeMain : #99CC00;
+@fontColorBase: #33691e;
+
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto Regular'), local('Roboto-Regular'), url(assets/fonts/Roboto.woff) format('woff');
+}
+
+html {
+  font-family: 'Roboto', sans-serif !important;
+}
+
 .bar-altacancha {
-  background: #99CC00 !important;
+  background: @verdeMain !important;
   color: #fff;
 
   .menu-icon {
@@ -17,4 +31,8 @@
     right: 42px;
     bottom: 5px;
   }
+}
+
+.search-box {
+  background: #eee;
 }
