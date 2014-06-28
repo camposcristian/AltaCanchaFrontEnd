@@ -592,12 +592,12 @@ module.exports = function ( grunt ) {
        */
       less: {
             files: [ 'src/**/*.less' ],
-            tasks: [ 'less:build', 'concat:build_css' ]
+            tasks: [ 'less:build', 'sass:build', 'concat:build_css' ]
         },
 
         sass: {
             files: [ 'src/**/*.scss' ],
-            tasks: [ 'sass:build', 'concat:build_css' ]
+            tasks: [ 'less:build', 'sass:build', 'concat:build_css' ]
         },
 
       /**
@@ -640,7 +640,7 @@ module.exports = function ( grunt ) {
    * before watching for changes.
    */
   grunt.renameTask( 'watch', 'delta' );
-  grunt.registerTask( 'watch', [ 'build', 'karma:unit', 'delta' ] );
+  grunt.registerTask( 'watch', [ 'build', /*'karma:unit',*/ 'delta' ] );
 
   /**
    * The default task is to build and compile.
@@ -653,8 +653,8 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'build', [
     'clean:build', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build', 'sass:build',
     'concat:build_css', 'clean:aux', 'copy:build_app_assets', 'copy:build_vendor_assets', 'copy:build_vendor_fonts',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_htaccess', 'index:build', 'karmaconfig',
-    'karma:continuous'
+    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_htaccess', 'index:build'/*, 'karmaconfig',
+    'karma:continuous'*/
   ]);
 
   /**
