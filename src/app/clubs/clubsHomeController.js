@@ -6,11 +6,10 @@ angular.module('clubsModule').config(['$stateProvider', function ($stateProvider
     });
 }]);
 
-angular.module('clubsModule').controller('clubsHomeController', function ($scope, $ionicSideMenuDelegate) {
+angular.module('clubsModule').controller('clubsHomeController', function ($scope) {
 
-    $scope.toggleSideBar = function () {
-        $ionicSideMenuDelegate.toggleLeft();
-    };
+    $scope.showSearchBox = false;
+
 
 });
 

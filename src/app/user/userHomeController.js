@@ -6,11 +6,7 @@ angular.module('userModule').config(['$stateProvider', function ($stateProvider)
     });
 }]);
 
-angular.module('userModule').controller('userHomeController', function ($scope, $ionicSideMenuDelegate) {
-
-    $scope.toggleSideBar = function () {
-        $ionicSideMenuDelegate.toggleLeft();
-    };
+angular.module('userModule').controller('userHomeController', function ($scope) {
 
 });
 

@@ -5,9 +5,9 @@
             <i class="icon ion-navicon"></i>
         </button>
         <img src="http://iconos.gratis.es/iconos/deportes/balones-y-pelotas/futbol.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()" />
-        <h1 class="title">Alta cancha</h1>
+        <h1 class="title">Detalle</h1>
         <!-- New Task button-->
-        <button class="button button-icon button-search" ng-click="showSearchBox = !showSearchBox ">
+        <button class="button button-icon button-search" ng-click="toggleSearchBox()">
             <i class="icon ion-search"></i>
         </button>
         <button class="button button-icon" ng-click="newTask()">
@@ -15,7 +15,7 @@
         </button>
     </ion-header-bar>
     <ion-content scroll="false">
-        <div class="search-box" ng-show = showSearchBox fade-in>
+        <div class="search-box">
             <h2 class="title">Buscar canchas</h2>
         </div>
         <!--<ion-list>
