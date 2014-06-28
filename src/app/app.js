@@ -6,7 +6,8 @@ angular.module('alta-cancha-app', [
         'templates-common',
 
         'sidebarModule',
-        'clubsModule'
+        'clubsModule',
+        'userModule'
     ])
 
     .run(function ($ionicPlatform, $cordovaSplashscreen) {

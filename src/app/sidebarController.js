@@ -11,8 +11,8 @@ angular.module('sidebarModule', []);
 angular.module('sidebarModule').controller('sidebarController', function ($scope, $ionicSideMenuDelegate) {
 
     $scope.items = [
-        {name: "Buscar Canchas", state: "clubsHome"},
-        {name: "Perfil", state: "userHome"},
+        {name: "Buscar Canchas", state: "clubs.home"},
+        {name: "Perfil", state: "user.home"},
         {name: "Tus Partidos", state: "user.games"},
         {name: "Historial", state: "user.history"}
     ]
