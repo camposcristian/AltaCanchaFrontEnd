@@ -21,7 +21,7 @@ angular.module('alta-cancha-app', [
         });
     })
 
-    .run(["OpenFB", "FB_APP_ID", "$rootScope" ,function (OpenFB, FB_APP_ID, $rootScope) {
+    .run(["OpenFB", "FB_APP_ID", "$rootScope", "$window" ,function (OpenFB, FB_APP_ID, $rootScope, $window) {
         /*ezfbProvider.setInitParams({
             appId: FB_APP_ID
         });*/

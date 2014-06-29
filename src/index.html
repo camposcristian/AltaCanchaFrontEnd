@@ -16,6 +16,12 @@
     <!-- 404 during development -->
     <script src="cordova.js"></script>
 
+    <script>
+        document.addEventListener("deviceready", function () {
+            runningInCordova = true;
+        }, false);
+    </script>
+
 </head>
 <body ng-controller="AppController">
 <ion-side-menus>

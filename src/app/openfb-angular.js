@@ -29,9 +29,9 @@ angular.module('openfb', [])
         // Used in the exit event handler to identify if the login has already been processed elsewhere (in the oauthCallback function)
             loginProcessed;
 
-        document.addEventListener("deviceready", function () {
+        /*document.addEventListener("deviceready", function () {
             runningInCordova = true;
-        }, false);
+        }, false);*/
 
         /**
          * Initialize the OpenFB module. You must use this function and initialize the module with an appId before you can
@@ -53,6 +53,7 @@ angular.module('openfb', [])
          * @param fbScope - The set of Facebook permissions requested
          */
         function login(fbScope) {
+
 
             if (!fbAppId) {
                 return error({error: 'Facebook App Id not set.'});
