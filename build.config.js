@@ -71,10 +71,13 @@ module.exports = {
     vendor_files: {
         js: [
             'vendor/ionic/js/ionic.bundle.js',
-            'vendor/ngCordova/dist/ng-cordova.js'
+            'vendor/ngCordova/dist/ng-cordova.js',
+            'vendor/angular/angular-resource.js',
+
+            'vendor/ngstorage/ngStorage.min.js',
+            'vendor/angular-easyfb/angular-easyfb.js'
         ],
         css: [
-            /*'vendor/ionic/css/ionic.css'*/
         ],
         fonts: [
             'vendor/ionic/fonts/*'

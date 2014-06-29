@@ -1,5 +1,5 @@
 angular.module('userModule', [
-    //'userService'
+    'userService'
 ]);
 
 angular.module('userModule').config(['$stateProvider', function ($stateProvider) {

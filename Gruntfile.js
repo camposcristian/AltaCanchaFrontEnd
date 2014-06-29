@@ -173,6 +173,26 @@ module.exports = function ( grunt ) {
                 }
             ]
         },
+        build_callback: {
+            files: [
+                {
+                    src: [ 'oauthcallback.html' ],
+                    dest: '<%= build_dir %>/',
+                    cwd: '.',
+                    expand: true
+                }
+            ]
+        },
+        compile_callback: {
+            files: [
+                {
+                    src: [ 'oauthcallback.html' ],
+                    dest: '<%= compile_dir %>/',
+                    cwd: '.',
+                    expand: true
+                }
+            ]
+        },
         compile_php: {
             files: [
                 {
@@ -363,6 +383,7 @@ module.exports = function ( grunt ) {
           loopfunc:true,
         curly: true,
           "-W065": true,
+          "-W116": true,
         immed: true,
         newcap: true,
         noarg: true,
@@ -653,7 +674,7 @@ module.exports = function ( grunt ) {
   grunt.registerTask( 'build', [
     'clean:build', 'html2js', 'jshint', 'coffeelint', 'coffee', 'less:build', 'sass:build',
     'concat:build_css', 'clean:aux', 'copy:build_app_assets', 'copy:build_vendor_assets', 'copy:build_vendor_fonts',
-    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_htaccess', 'index:build'/*, 'karmaconfig',
+    'copy:build_appjs', 'copy:build_vendorjs', 'copy:build_callback', 'index:build'/*, 'karmaconfig',
     'karma:continuous'*/
   ]);
 
@@ -662,7 +683,7 @@ module.exports = function ( grunt ) {
    * minifying your code.
    */
   grunt.registerTask( 'compile', [
-    'clean:compile', 'less:compile', 'sass:compile', 'concat:build_css', 'clean:aux', 'copy:compile_htaccess', 'copy:compile_php', 'copy:compile_config', 'copy:compile_assets', 'ngmin', 'concat:compile_js', 'uglify', 'index:compile'
+    'clean:compile', 'less:compile', 'sass:compile', 'concat:build_css', 'clean:aux', 'copy:compile_callback', 'copy:compile_php', 'copy:compile_config', 'copy:compile_assets', 'ngmin', 'concat:compile_js'/*, 'uglify'*/, 'index:compile'
   ]);
 
   /**

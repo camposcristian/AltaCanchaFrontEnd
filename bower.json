@@ -5,6 +5,8 @@
         "ionic": "driftyco/ionic-bower#1.0.0-beta.6",
         "ngCordova": "0.1.1-alpha",
         "angular-mocks": "1.2.10",
+        "angular-easyfb": "1.0.0",
+        "ngstorage": "0.3.0",
         "angular-resource": "1.2.16"
     },
     "dependencies": {}
