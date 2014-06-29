@@ -59,11 +59,11 @@
         <div class="sliderDiv"><img src="assets/img/canchas/cancha-1-thumb-c-2.jpg" alt="ACA VA EL SLIDER"/></div>
 
         <div class="row cancha-horarios">
-            <button class="col">18:30</button>
-            <button class="col active">19:00</button>
-            <button class="col taken">19:30</button>
-            <button class="col">20:00</button>
-            <button class="col">20:30</button>
+            <button ng-model="h1" ng-click="selectHour(h1)" ng-class="{col: true, active: selectedHours.indexOf(h1)!= -1}">18:30</button>
+            <button ng-model="h2" ng-click="selectHour(h2)" ng-class="{col: true, active: selectedHours.indexOf(h2)!= -1, taken: selectedHours.indexOf(h2)== -1}">19:00</button>
+            <button ng-model="h3" ng-click="selectHour(h3)" ng-class="{col: true, active: selectedHours.indexOf(h3)!= -1, taken: selectedHours.indexOf(h3)== -1}">19:30</button>
+            <button ng-model="h4" ng-click="selectHour(h4)" ng-class="{col: true, active: selectedHours.indexOf(h4)!= -1}">20:00</button>
+            <button ng-model="h5" ng-click="selectHour(h5)" ng-class="{col: true, active: selectedHours.indexOf(h5)!= -1}">20:30</button>
         </div>
 
         <div class="padding cancha-descripcion">
