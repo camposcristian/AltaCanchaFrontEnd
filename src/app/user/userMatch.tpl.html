@@ -1,0 +1,76 @@
+<!-- Center content -->
+<ion-side-menu-content>
+    <ion-header-bar class="bar-dark bar-altacancha">
+        <button class="button button-icon menu-icon" ng-click="toggleSideBar()">
+            <i class="icon ion-navicon"></i>
+        </button>
+        <img class="altacancha-logo" src="assets/img/alta-cancha-logo.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()" />
+        <h1 class="title">Detalle del partido</h1>
+        <!-- New Task button-->
+        <button class="button button-icon button-search" ng-click="showSearchBox = !showSearchBox">
+            <i class="icon ion-search"></i>
+        </button>
+    </ion-header-bar>
+    <ion-content has-bouncing="true">
+        <div class="search-box" ng-show="showSearchBox">
+            <h1 class="padding">Buscar canchas</h1>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="date" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <div class="item item-input item-select">
+                        <div class="input-label">
+                            Horario
+                        </div>
+                        <select class="" name="hourPicker" id="hourPicker">
+                            <option ng-repeat="t in [1,2,3,4]" value="{{t}}">{{t}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="text" placeholder="Barrio"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <button class="button button-full">
+                        Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="match-logo">
+            <img src="assets/img/alta-cancha-logo-grande.png" alt="Logo Altacancha"/>
+        </div>
+
+        <div class="booking-club-name">
+            <h4 class="padding-horizontal">CANCHA_NOMBRE</h4>
+        </div>
+
+        <div class="booking-club-court">
+            <h5 class="padding-horizontal">CANCHA_NUMBER</h5>
+        </div>
+
+        <div class="booking-club-date">
+            <p class="padding-horizontal">CANCHA_FECHA - CANCHA_HORA</p>
+        </div>
+
+        <div class="list match-friendlist">
+            <h5 class="padding"><i class="ion-android-friends"></i> Van a jugar</h5>
+            <a ng-repeat="t in [1,2,3,4,5,6]" class="item item-thumbnail-left" href="#">
+                <img src="http://ionicframework.com/img/docs/blue-album.jpg">
+                <h2>Pretty Hate Machine</h2>
+                <p>Nine Inch Nails</p>
+            </a>
+
+        </div>
+
+    </ion-content>
+</ion-side-menu-content>
