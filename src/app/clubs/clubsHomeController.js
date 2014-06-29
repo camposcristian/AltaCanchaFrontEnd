@@ -4,17 +4,17 @@ angular.module('clubsModule').config(['$stateProvider', function ($stateProvider
         templateUrl: 'clubs/clubsHome.tpl.html',
         controller: 'clubsHomeController',
         resolve: {
-            clubs: ['Clubs', function (Clubs) {
-                return Clubs.query().$promise;
+            matches: ['Matches', function (Matches) {
+                return Matches.query().$promise;
             }]
         }
     });
 }]);
 
-angular.module('clubsModule').controller('clubsHomeController', function ($scope, clubs, Clubs, $state) {
+angular.module('clubsModule').controller('clubsHomeController', function ($scope, matches) {
 
     $scope.showSearchBox = false;
-    $scope.clubs = clubs;
+    $scope.matches = matches;
 
 
 

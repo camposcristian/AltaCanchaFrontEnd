@@ -4,8 +4,8 @@ angular.module('userModule').config(['$stateProvider', function ($stateProvider)
         templateUrl: 'user/userMatch.tpl.html',
         controller: 'userMatchController',
         resolve: {
-            club: ['Clubs', "$stateParams", function (Clubs, $stateParams) {
-                return Clubs.get({id: $stateParams.id}).$promise;
+            club: ['Matches', "$stateParams", function (Matches, $stateParams) {
+                return Matches.get({id: $stateParams.id}).$promise;
             }]
         }
     });

@@ -44688,9 +44688,13 @@ angular.module('alta-cancha-app', [
   }
 ]).config([
   '$urlRouterProvider',
-  '$locationProvider',
-  function ($urlRouterProvider, $locationProvider) {
+  '$sceDelegateProvider',
+  function ($urlRouterProvider, $sceDelegateProvider) {
     $urlRouterProvider.otherwise('/user/login');
+    $sceDelegateProvider.resourceUrlWhitelist([
+      'self',
+      new RegExp('^(http[s]?)://(w{3}.)?bitpay/.com/.+$')
+    ]);
   }
 ]).controller('AppController', [
   '$scope',
@@ -44725,7 +44729,11 @@ angular.module('alta-cancha-app', [
     ];
   }
 ]);
-angular.module('clubsModule', ['clubsService']);
+angular.module('clubsModule', [
+  'clubsService',
+  'bookingService',
+  'payService'
+]);
 angular.module('clubsModule').config([
   '$stateProvider',
   function ($stateProvider) {
@@ -44733,6 +44741,25 @@ angular.module('clubsModule').config([
       abstract: true,
       template: '<ui-view/>'
     });
+  }
+]);
+angular.module('bookingService', ['ngResource']);
+angular.module('bookingService').factory('Booking', [
+  '$resource',
+  'ESCAPED_SERVER_URL',
+  function ($resource, ESCAPED_SERVER_URL) {
+    var resource = $resource(ESCAPED_SERVER_URL + '/Booking/:id/', { id: '@id' }, {
+        'query': {
+          method: 'GET',
+          isArray: true,
+          cache: true
+        },
+        'get': {
+          method: 'GET',
+          cache: true
+        }
+      });
+    return resource;
   }
 ]);
 angular.module('clubsModule').config([
@@ -44747,9 +44774,59 @@ angular.module('clubsModule').config([
 ]);
 angular.module('clubsModule').controller('clubsBookingController', [
   '$scope',
-  function ($scope) {
+  'Booking',
+  'Pay',
+  '$state',
+  function ($scope, Booking, Pay, $state) {
     $scope.showSearchBox = false;
     $scope.court = $scope.$storage.court;
+    $scope.bookCourt = function () {
+      var booking = new Booking();
+      booking.Payment = 0;
+      booking.CourtId = $scope.court.Id;
+      booking.DateTimeIn = new Date('06-29-2014 8:30 PM');
+      booking.DateTimeOut = new Date('06-29-2014 9:30 PM');
+      booking.Players = [];
+      booking.$save().then(function (response) {
+        $scope.$storage.booking = response;
+        $state.go('clubs.confirmation');
+      });
+    };
+    $scope.payCourt = function () {
+      var booking = new Booking();
+      booking.Payment = 0;
+      booking.CourtId = $scope.court.Id;
+      booking.DateTimeIn = new Date('06-29-2014 8:30 PM');
+      booking.DateTimeOut = new Date('06-29-2014 9:30 PM');
+      booking.Players = [];
+      booking.$save().then(function (response) {
+        $scope.$storage.booking = response;
+        var pay = new Pay();
+        pay.BookId = $scope.$storage.booking.Id;
+        pay.$save().then(function (response) {
+          $scope.$storage.pay = response;
+          $scope.$storage.pay.url += '&view=iframe';
+          $state.go('clubs.confirmation');
+        });
+      });
+    };
+  }
+]);
+;
+angular.module('clubsModule').config([
+  '$stateProvider',
+  function ($stateProvider) {
+    $stateProvider.state('clubs.confirmation', {
+      url: '/confirmation',
+      templateUrl: 'clubs/clubsConfirmation.tpl.html',
+      controller: 'clubsConfirmationController'
+    });
+  }
+]);
+angular.module('clubsModule').controller('clubsConfirmationController', [
+  '$scope',
+  function ($scope) {
+    $scope.showSearchBox = false;
   }
 ]);
 angular.module('clubsModule').config([
@@ -44809,10 +44886,10 @@ angular.module('clubsModule').config([
       templateUrl: 'clubs/clubsHome.tpl.html',
       controller: 'clubsHomeController',
       resolve: {
-        clubs: [
-          'Clubs',
-          function (Clubs) {
-            return Clubs.query().$promise;
+        matches: [
+          'Matches',
+          function (Matches) {
+            return Matches.query().$promise;
           }
         ]
       }
@@ -44821,12 +44898,10 @@ angular.module('clubsModule').config([
 ]);
 angular.module('clubsModule').controller('clubsHomeController', [
   '$scope',
-  'clubs',
-  'Clubs',
-  '$state',
-  function ($scope, clubs, Clubs, $state) {
+  'matches',
+  function ($scope, matches) {
     $scope.showSearchBox = false;
-    $scope.clubs = clubs;
+    $scope.matches = matches;
   }
 ]);
 angular.module('clubsModule').config([
@@ -44852,6 +44927,25 @@ angular.module('clubsService').factory('Clubs', [
   'ESCAPED_SERVER_URL',
   function ($resource, ESCAPED_SERVER_URL) {
     var resource = $resource(ESCAPED_SERVER_URL + '/Club/:id/', { id: '@id' }, {
+        'query': {
+          method: 'GET',
+          isArray: true,
+          cache: true
+        },
+        'get': {
+          method: 'GET',
+          cache: true
+        }
+      });
+    return resource;
+  }
+]);
+angular.module('payService', ['ngResource']);
+angular.module('payService').factory('Pay', [
+  '$resource',
+  'ESCAPED_SERVER_URL',
+  function ($resource, ESCAPED_SERVER_URL) {
+    var resource = $resource(ESCAPED_SERVER_URL + '/Pay/:id/', { id: '@id' }, {
         'query': {
           method: 'GET',
           isArray: true,
@@ -45025,7 +45119,10 @@ angular.module('sidebarModule').controller('sidebarController', [
     };
   }
 ]);
-angular.module('userModule', ['userService']);
+angular.module('userModule', [
+  'userService',
+  'matchesService'
+]);
 angular.module('userModule').config([
   '$stateProvider',
   function ($stateProvider) {
@@ -45055,7 +45152,7 @@ angular.module('userModule').controller('LoginController', [
   '$http',
   function ($scope, OpenFB, Users, $window, $state, $http) {
     if ($window.localStorage['fbtoken']) {
-      $http.defaults.headers.common = { 'Authentication': 'Bearer ' + $scope.$storage.token };
+      $http.defaults.headers.common = { 'Authorization': 'Bearer ' + $scope.$storage.token };
       $state.go('clubs.home');
     }
     $scope.fbLogin = function () {
@@ -45088,10 +45185,19 @@ angular.module('userModule').controller('LoginController', [
       usert.password = user.Password;
       $http.post('http://altacancha.azurewebsites.net/Token', 'username=' + user.Email + '&password=' + user.Password + '&grant_type=password', { headers: headers }).success(function (response) {
         $scope.$storage.token = response.access_token;
-        $http.defaults.headers.common = { 'Authentication': 'Bearer ' + response.access_token };
+        $http.defaults.headers.common = { 'Authorization': 'Bearer ' + response.access_token };
         $state.go('clubs.home');
       });
     };
+  }
+]);
+angular.module('matchesService', ['ngResource']);
+angular.module('matchesService').factory('Matches', [
+  '$resource',
+  'ESCAPED_SERVER_URL',
+  function ($resource, ESCAPED_SERVER_URL) {
+    var resource = $resource(ESCAPED_SERVER_URL + '/Match/:id/', { id: '@id' }, {});
+    return resource;
   }
 ]);
 angular.module('userModule').config([
@@ -45118,10 +45224,10 @@ angular.module('userModule').config([
       controller: 'userMatchController',
       resolve: {
         club: [
-          'Clubs',
+          'Matches',
           '$stateParams',
-          function (Clubs, $stateParams) {
-            return Clubs.get({ id: $stateParams.id }).$promise;
+          function (Matches, $stateParams) {
+            return Matches.get({ id: $stateParams.id }).$promise;
           }
         ]
       }
@@ -45174,7 +45280,7 @@ angular.module('services.httpRequestTracker').factory('httpRequestTracker', [
     return httpRequestTracker;
   }
 ]);
-angular.module('templates-app', ['clubs/clubsBooking.tpl.html', 'clubs/clubsDetail.tpl.html', 'clubs/clubsHome.tpl.html', 'clubs/clubsResults.tpl.html', 'sidebar.tpl.html', 'user/login.tpl.html', 'user/userHome.tpl.html', 'user/userMatch.tpl.html']);
+angular.module('templates-app', ['clubs/clubsBooking.tpl.html', 'clubs/clubsConfirmation.tpl.html', 'clubs/clubsDetail.tpl.html', 'clubs/clubsHome.tpl.html', 'clubs/clubsResults.tpl.html', 'sidebar.tpl.html', 'user/login.tpl.html', 'user/userHome.tpl.html', 'user/userMatch.tpl.html']);
 
 angular.module("clubs/clubsBooking.tpl.html", []).run(["$templateCache", function($templateCache) {
   $templateCache.put("clubs/clubsBooking.tpl.html",
@@ -45242,16 +45348,85 @@ angular.module("clubs/clubsBooking.tpl.html", []).run(["$templateCache", functio
     "        </div>\n" +
     "\n" +
     "        <div class=\"row padding-horizontal booking-buy-button\">\n" +
-    "            <button class=\"button button-block button-dark\">\n" +
+    "            <button ng-click=\"payCourt()\" class=\"button button-block button-dark\">\n" +
     "                Pagar con Bit Pay\n" +
     "            </button>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"row padding-horizontal booking-buy-button\">\n" +
-    "            <button class=\"button button-block button-dark\">\n" +
+    "            <button ng-click=\"bookCourt()\" class=\"button button-block button-dark\">\n" +
     "                Pagar en cancha\n" +
     "            </button>\n" +
     "        </div>\n" +
+    "\n" +
+    "    </ion-content>\n" +
+    "</ion-side-menu-content>");
+}]);
+
+angular.module("clubs/clubsConfirmation.tpl.html", []).run(["$templateCache", function($templateCache) {
+  $templateCache.put("clubs/clubsConfirmation.tpl.html",
+    "<!-- Center content -->\n" +
+    "<ion-side-menu-content>\n" +
+    "    <ion-header-bar class=\"bar-dark bar-altacancha\">\n" +
+    "        <button class=\"button button-icon menu-icon\" ng-click=\"toggleSideBar()\">\n" +
+    "            <i class=\"icon ion-navicon\"></i>\n" +
+    "        </button>\n" +
+    "        <img class=\"altacancha-logo\" src=\"assets/img/alta-cancha-logo.png\" width=\"24\" height=\"24\" alt=\"Logo Alta Cancha\" ng-click=\"toggleSideBar()\" />\n" +
+    "        <h1 class=\"title\">Detalle de tu reserva</h1>\n" +
+    "        <!-- New Task button-->\n" +
+    "        <button class=\"button button-icon button-search\" ng-click=\"showSearchBox = !showSearchBox\">\n" +
+    "            <i class=\"icon ion-search\"></i>\n" +
+    "        </button>\n" +
+    "    </ion-header-bar>\n" +
+    "    <ion-content has-bouncing=\"true\">\n" +
+    "        <div class=\"search-box\" ng-show=\"showSearchBox\">\n" +
+    "            <h1 class=\"padding\">Reserva tu cancha en</h1>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col col-67\">\n" +
+    "                    <label class=\"item item-input\">\n" +
+    "                        <input ng-model=\"search.date\" type=\"date\" placeholder=\"Fecha\"/>\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
+    "                <div class=\"col col-33\">\n" +
+    "                    <div class=\"item item-input item-select\">\n" +
+    "                        <div class=\"input-label\">\n" +
+    "                            Horario\n" +
+    "                        </div>\n" +
+    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\" ng-model=\"search.hour\" ng-options=\"hou for hou in hours\"\n" +
+    "                                class=\"form-control kill-border-radius\"></select>\n" +
+    "                    </div>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "            <div class=\"row\">\n" +
+    "                <div class=\"col col-67\">\n" +
+    "                    <label class=\"item item-input\">\n" +
+    "                        <input ng-model=\"name\" type=\"text\" placeholder=\"Nombre\"/>\n" +
+    "                    </label>\n" +
+    "                </div>\n" +
+    "                <div class=\"col col-33\">\n" +
+    "                    <button ng-click=\"search(name)\" class=\"button button-full\">\n" +
+    "                        <i class=\"icon ion-search\"></i>\n" +
+    "                    </button>\n" +
+    "                </div>\n" +
+    "            </div>\n" +
+    "        </div>\n" +
+    "\n" +
+    "\n" +
+    "        <div class=\"booking-logo\">\n" +
+    "            <img src=\"assets/img/alta-cancha-logo-grande.png\" alt=\"Logo Altacancha\"/>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"booking-club-name\">\n" +
+    "            <h4 class=\"padding-horizontal\">Listo! Ya hiciste tu reserva!</h4>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <div class=\"row padding-horizontal booking-buy-button\">\n" +
+    "            <button class=\"button button-block button-dark\">\n" +
+    "                Avisale a tus amigos\n" +
+    "            </button>\n" +
+    "        </div>\n" +
+    "\n" +
+    "        <iframe ng-src=\"{{$storage.pay.url}}\"></iframe>\n" +
     "\n" +
     "    </ion-content>\n" +
     "</ion-side-menu-content>");
@@ -45401,12 +45576,12 @@ angular.module("clubs/clubsHome.tpl.html", []).run(["$templateCache", function($
     "        <ul class=\"list-canchas\">\n" +
     "\n" +
     "            <!-- finalizados con opacity de 0.5 :: VER ESTADO ( FINALIZADO, POR CONFIRMAR, CONFIRMADO ) -->\n" +
-    "            <a ng-repeat=\"club in clubs\" ui-sref=\"user.match({ id: club.Id })\" class=\"item-cancha\">\n" +
-    "                <img class=\"item-cancha-img\" ng-src=\"{{club.HeaderPhoto.Src}}\" alt=\"{{club.Name}}\"/>\n" +
+    "            <a ng-repeat=\"match in matches\" ui-sref=\"user.match({ id: match.Id })\" class=\"item-cancha\">\n" +
+    "                <img class=\"item-cancha-img\" ng-src=\"{{match.Court.Photos[0].Src}}\" alt=\"{{match.Name}}\"/>\n" +
     "                <div class=\"item-cancha-overlay\">\n" +
-    "                    <h5 class=\"nombre padding-horizontal\">{{club.Name}}</h5>\n" +
-    "                    <h6 class=\"direccion padding-horizontal\" >{{club.Address}}</h6>\n" +
-    "                    <div class=\"precio\">Finalizado</div>\n" +
+    "                    <h5 class=\"nombre padding-horizontal\">{{match.Court.Name}}</h5>\n" +
+    "                    <h6 class=\"direccion padding-horizontal\" >{{match.Court.Description}}</h6>\n" +
+    "                    <div class=\"precio\">Por Jugar</div>\n" +
     "                </div>\n" +
     "            </a>\n" +
     "\n" +
@@ -45476,7 +45651,7 @@ angular.module("clubs/clubsResults.tpl.html", []).run(["$templateCache", functio
     "                <div class=\"item-cancha-overlay\">\n" +
     "                    <h5 class=\"nombre padding-horizontal\">{{club.Name}}</h5>\n" +
     "                    <h6 class=\"direccion padding-horizontal\" >{{club.Address}}</h6>\n" +
-    "                    <div class=\"precio\">Finalizado</div>\n" +
+    "                    <div class=\"precio\">Desde {{club.Courts.0.Price}}</div>\n" +
     "                </div>\n" +
     "            </a>\n" +
     "\n" +

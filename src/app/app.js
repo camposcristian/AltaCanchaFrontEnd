@@ -35,9 +35,11 @@ angular.module('alta-cancha-app', [
 
     }])
 
-    .config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
+    .config(['$urlRouterProvider', '$sceDelegateProvider', function ($urlRouterProvider, $sceDelegateProvider) {
         //$locationProvider.html5Mode(true);
         $urlRouterProvider.otherwise("/user/login");
+
+        $sceDelegateProvider.resourceUrlWhitelist(['self', new RegExp('^(http[s]?):\/\/(w{3}.)?bitpay\/.com/.+$')]);
     }])
 
     .controller('AppController', ["$scope", "$ionicSideMenuDelegate", "$localStorage", "httpRequestTracker", "$state", "Clubs", function ($scope, $ionicSideMenuDelegate, $localStorage, httpRequestTracker, $state, Clubs) {

@@ -15,7 +15,7 @@ angular.module('userModule').controller('LoginController', ["$scope", "OpenFB", 
     if ($window.localStorage['fbtoken']) {
         $http.defaults.headers.common =
         {
-            "Authentication": "Bearer " + $scope.$storage.token
+            "Authorization": "Bearer " + $scope.$storage.token
         };
         $state.go('clubs.home');
     }
@@ -65,7 +65,7 @@ angular.module('userModule').controller('LoginController', ["$scope", "OpenFB", 
             $scope.$storage.token = response.access_token;
             $http.defaults.headers.common =
             {
-                "Authentication": "Bearer " + response.access_token
+                "Authorization": "Bearer " + response.access_token
             };
             $state.go("clubs.home");
 

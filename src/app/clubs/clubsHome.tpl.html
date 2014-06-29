@@ -52,12 +52,12 @@
         <ul class="list-canchas">
 
             <!-- finalizados con opacity de 0.5 :: VER ESTADO ( FINALIZADO, POR CONFIRMAR, CONFIRMADO ) -->
-            <a ng-repeat="club in clubs" ui-sref="user.match({ id: club.Id })" class="item-cancha">
-                <img class="item-cancha-img" ng-src="{{club.HeaderPhoto.Src}}" alt="{{club.Name}}"/>
+            <a ng-repeat="match in matches" ui-sref="user.match({ id: match.Id })" class="item-cancha">
+                <img class="item-cancha-img" ng-src="{{match.Court.Photos[0].Src}}" alt="{{match.Name}}"/>
                 <div class="item-cancha-overlay">
-                    <h5 class="nombre padding-horizontal">{{club.Name}}</h5>
-                    <h6 class="direccion padding-horizontal" >{{club.Address}}</h6>
-                    <div class="precio">Finalizado</div>
+                    <h5 class="nombre padding-horizontal">{{match.Court.Name}}</h5>
+                    <h6 class="direccion padding-horizontal" >{{match.Court.Description}}</h6>
+                    <div class="precio">Por Jugar</div>
                 </div>
             </a>
 

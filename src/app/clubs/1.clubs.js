@@ -1,5 +1,7 @@
 angular.module('clubsModule', [
-    'clubsService'
+    'clubsService',
+    "bookingService",
+    "payService"
 ]);
 
 angular.module('clubsModule').config(['$stateProvider', function ($stateProvider) {
