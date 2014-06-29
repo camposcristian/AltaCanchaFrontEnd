@@ -28,10 +28,10 @@ angular.module('alta-cancha-app', [
          });*/
 
         //Para el Browser
-        //OpenFB.init(FB_APP_ID, false, "http://localhost/alta-cancha-hack/build/oauthcallback.html", window.localStorage);
+        OpenFB.init(FB_APP_ID, false, "http://localhost/alta-cancha-hack/build/oauthcallback.html", window.localStorage);
 
         //Para El celu
-        OpenFB.init(FB_APP_ID, true);
+        //OpenFB.init(FB_APP_ID, true);
 
     }])
 
