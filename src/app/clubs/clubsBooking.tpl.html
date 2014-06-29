@@ -5,7 +5,7 @@
             <i class="icon ion-navicon"></i>
         </button>
         <img class="altacancha-logo" src="assets/img/alta-cancha-logo.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()" />
-        <h1 class="title">Detalle</h1>
+        <h1 class="title">Detalle de tu reserva</h1>
         <!-- New Task button-->
         <button class="button button-icon button-search" ng-click="showSearchBox = !showSearchBox">
             <i class="icon ion-search"></i>
@@ -46,42 +46,31 @@
         </div>
 
 
-        <div class="row">
+        <div class="booking-logo">
+            <img src="assets/img/alta-cancha-logo-grande.png" alt="Logo Altacancha"/>
+        </div>
+
+        <div class="booking-club-name">
             <h4 class="padding-horizontal">CANCHA_NOMBRE</h4>
         </div>
 
-        <div class="tabs tabs-canchas">
-            <a class="tab-item">
-                Cancha #1
-            </a>
-            <a class="tab-item">
-                Cancha #2
-            </a>
-            <a class="tab-item">
-                Cancha #3
-            </a>
-            <a class="tab-item">
-                Cancha #4
-            </a>
+        <div class="booking-club-court">
+            <h5 class="padding-horizontal">CANCHA_NUMBER</h5>
         </div>
 
-        <div class="sliderDiv"><img src="assets/img/canchas/cancha-1-thumb-c-2.jpg" alt="ACA VA EL SLIDER"/></div>
-
-        <div class="row cancha-horarios">
-            <button class="col">18:30</button>
-            <button class="col active">19:00</button>
-            <button class="col taken">19:30</button>
-            <button class="col">20:00</button>
-            <button class="col">20:30</button>
+        <div class="booking-club-date">
+            <p class="padding-horizontal">CANCHA_FECHA - CANCHA_HORA</p>
         </div>
 
-        <div class="padding cancha-descripcion">
-            Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 50
+        <div class="row padding-horizontal booking-buy-button">
+            <button class="button button-block button-dark">
+                Pagar con Bit Pay
+            </button>
         </div>
 
-        <div class="cancha-reservar padding">
-            <button ui-sref="clubs.booking" class="button button-block button-positive">
-                Reservar cancha
+        <div class="row padding-horizontal booking-buy-button">
+            <button class="button button-block button-dark">
+                Pagar en cancha
             </button>
         </div>
 
