@@ -1,0 +1,63 @@
+<!-- Center content -->
+<ion-side-menu-content>
+    <ion-header-bar class="bar-dark bar-altacancha">
+        <button class="button button-icon menu-icon" ng-click="toggleSideBar()">
+            <i class="icon ion-navicon"></i>
+        </button>
+        <img class="altacancha-logo" src="assets/img/alta-cancha-logo.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()" />
+        <h1 class="title">Detalle de tu reserva</h1>
+        <!-- New Task button-->
+        <button class="button button-icon button-search" ng-click="showSearchBox = !showSearchBox">
+            <i class="icon ion-search"></i>
+        </button>
+    </ion-header-bar>
+    <ion-content has-bouncing="true">
+        <div class="search-box" ng-show="showSearchBox">
+            <h1 class="padding">Reserva tu cancha en</h1>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input ng-model="search.date" type="date" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <div class="item item-input item-select">
+                        <div class="input-label">
+                            Horario
+                        </div>
+                        <select class="" name="hourPicker" id="hourPicker" ng-model="search.hour" ng-options="hou for hou in hours"
+                                class="form-control kill-border-radius"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input ng-model="name" type="text" placeholder="Nombre"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <button ng-click="search(name)" class="button button-full">
+                        <i class="icon ion-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="booking-logo">
+            <img src="assets/img/alta-cancha-logo-grande.png" alt="Logo Altacancha"/>
+        </div>
+
+        <div class="booking-club-name">
+            <h4 class="padding-horizontal">Listo! Ya hiciste tu reserva!</h4>
+        </div>
+
+        <div class="row padding-horizontal booking-buy-button">
+            <button class="button button-block button-dark">
+                Avisale a tus amigos
+            </button>
+        </div>
+
+    </ion-content>
+</ion-side-menu-content>
