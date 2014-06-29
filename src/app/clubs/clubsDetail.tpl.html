@@ -56,7 +56,12 @@
             </a>
         </div>
 
-        <div class="sliderDiv"><img src="assets/img/canchas/cancha-1-thumb-c-2.jpg" alt="ACA VA EL SLIDER"/></div>
+        <ion-slide-box on-slide-changed="slideHasChanged($index)">
+            <ion-slide ng-repeat="photo in club.Photos">
+                <img ng-src="{{photo.Src}}" alt="ACA VA EL SLIDER"/>
+            </ion-slide>
+
+        </ion-slide-box>
 
         <div class="row cancha-horarios">
             <button ng-model="h1" ng-click="selectHour(h1)" ng-class="{col: true, active: selectedHours.indexOf(h1)!= -1}">18:30</button>
