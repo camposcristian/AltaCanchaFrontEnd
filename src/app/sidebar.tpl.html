@@ -10,7 +10,7 @@
             <!--<ion-item ng-repeat="project in projects" ng-click="selectProject(project, $index)" ng-class="{active: activeProject == project}">
                 {{project.title}}
             </ion-item>-->
-            <ion-item ng-repeat="item in items" ui-sref-active="active" ui-sref="{{item.state}}">
+            <ion-item ng-repeat="item in items" ng-click="toggleSideBar()" ui-sref-active="active" ui-sref="{{item.state}}">
                 {{item.name}}
             </ion-item>
             <!--<ion-item ui-sref-active="active" ui-sref="userHome">
