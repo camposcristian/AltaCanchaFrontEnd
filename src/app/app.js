@@ -27,10 +27,10 @@ angular.module('alta-cancha-app', [
         });*/
 
         //Para el Browser
-        OpenFB.init(FB_APP_ID, "http://localhost/alta-cancha-hack/build/oauthcallback.html", window.localStorage);
+        //OpenFB.init(FB_APP_ID, "http://localhost/alta-cancha-hack/build/oauthcallback.html", window.localStorage);
 
         //Para El celu
-        //OpenFB.init('1632413586984671');
+        OpenFB.init(FB_APP_ID);
 
         /*$rootScope.$on('$stateChangeStart', function(event, toState) {
             if (toState.name !== "user.login" && !$window.sessionStorage['fbtoken']) {
