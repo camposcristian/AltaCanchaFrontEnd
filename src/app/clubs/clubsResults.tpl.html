@@ -53,7 +53,7 @@
 
             <!-- finalizados con opacity de 0.5 :: VER ESTADO ( FINALIZADO, POR CONFIRMAR, CONFIRMADO ) -->
             <a ng-repeat="club in clubs" ui-sref="clubs.detail({id:club.Id})" class="item-cancha">
-                <img class="item-cancha-img" ng-src="{{club.HeaderPhoto.Src}}" alt="CANCHA_NOMBRE"/>
+                <img class="item-cancha-img" ng-src="{{club.HeaderPhoto.Src}}" alt="{{club.Name}}"/>
                 <div class="item-cancha-overlay">
                     <h5 class="nombre padding-horizontal">{{club.Name}}</h5>
                     <h6 class="direccion padding-horizontal" >{{club.Address}}</h6>
