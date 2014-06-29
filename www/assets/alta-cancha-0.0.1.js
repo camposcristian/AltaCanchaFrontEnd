@@ -44684,7 +44684,7 @@ angular.module('alta-cancha-app', [
   '$rootScope',
   '$window',
   function (OpenFB, FB_APP_ID, $rootScope, $window) {
-    OpenFB.init(FB_APP_ID, true);
+    OpenFB.init(FB_APP_ID, false, 'http://localhost/alta-cancha-hack/build/oauthcallback.html', window.localStorage);
   }
 ]).config([
   '$urlRouterProvider',
@@ -44697,7 +44697,9 @@ angular.module('alta-cancha-app', [
   '$ionicSideMenuDelegate',
   '$localStorage',
   'httpRequestTracker',
-  function ($scope, $ionicSideMenuDelegate, $localStorage, httpRequestTracker) {
+  '$state',
+  'Clubs',
+  function ($scope, $ionicSideMenuDelegate, $localStorage, httpRequestTracker, $state, Clubs) {
     $scope.toggleSideBar = function () {
       $ionicSideMenuDelegate.toggleLeft();
     };
@@ -44705,6 +44707,22 @@ angular.module('alta-cancha-app', [
     $scope.hasPendingRequests = function () {
       return httpRequestTracker.hasPendingRequests();
     };
+    $scope.search = function (name) {
+      Clubs.query({ name: name }).$promise.then(function (response) {
+        $scope.$storage.results = response;
+        if ($state.current.name == 'clubs.results') {
+          $state.reload();
+        }
+        $state.go('clubs.results');
+      });
+    };
+    $scope.hours = [
+      16,
+      17,
+      18,
+      19,
+      20
+    ];
   }
 ]);
 angular.module('clubsModule', ['clubsService']);
@@ -44804,7 +44822,9 @@ angular.module('clubsModule').config([
 angular.module('clubsModule').controller('clubsHomeController', [
   '$scope',
   'clubs',
-  function ($scope, clubs) {
+  'Clubs',
+  '$state',
+  function ($scope, clubs, Clubs, $state) {
     $scope.showSearchBox = false;
     $scope.clubs = clubs;
   }
@@ -44815,24 +44835,15 @@ angular.module('clubsModule').config([
     $stateProvider.state('clubs.results', {
       url: '/results',
       templateUrl: 'clubs/clubsResults.tpl.html',
-      controller: 'clubsResultsController',
-      resolve: {
-        clubs: [
-          'Clubs',
-          function (Clubs) {
-            return Clubs.query().$promise;
-          }
-        ]
-      }
+      controller: 'clubsResultsController'
     });
   }
 ]);
 angular.module('clubsModule').controller('clubsResultsController', [
   '$scope',
-  'clubs',
-  function ($scope, clubs) {
+  function ($scope) {
     $scope.showSearchBox = false;
-    $scope.clubs = clubs;
+    $scope.clubs = $scope.$storage.results;
   }
 ]);
 angular.module('clubsService', ['ngResource']);
@@ -44986,11 +44997,12 @@ angular.module('openfb', []).factory('OpenFB', [
 angular.module('sidebarModule', []);
 angular.module('sidebarModule').controller('sidebarController', [
   '$scope',
-  '$ionicSideMenuDelegate',
-  function ($scope, $ionicSideMenuDelegate) {
+  'OpenFB',
+  '$window',
+  function ($scope, OpenFB, $window) {
     $scope.items = [
       {
-        name: 'Tus partidos',
+        name: 'Buscar',
         state: 'clubs.home'
       },
       {
@@ -44998,18 +45010,19 @@ angular.module('sidebarModule').controller('sidebarController', [
         state: 'user.home'
       },
       {
-        name: 'Login',
-        state: 'user.login'
-      },
-      {
         name: 'Tus Partidos',
-        state: 'user.games'
+        state: 'user.matches'
       },
       {
         name: 'Historial',
         state: 'user.history'
       }
     ];
+    $scope.logout = function () {
+      OpenFB.logout();
+      delete window.localStorage['fbtoken'];
+      $scope.toggleSideBar();
+    };
   }
 ]);
 angular.module('userModule', ['userService']);
@@ -45037,10 +45050,14 @@ angular.module('userModule').controller('LoginController', [
   '$scope',
   'OpenFB',
   'Users',
-  '$location',
   '$window',
   '$state',
-  function ($scope, OpenFB, Users, $location, $window, $state) {
+  '$http',
+  function ($scope, OpenFB, Users, $window, $state, $http) {
+    if ($window.localStorage['fbtoken']) {
+      $http.defaults.headers.common = { 'Authentication': 'Bearer ' + $scope.$storage.token };
+      $state.go('clubs.home');
+    }
     $scope.fbLogin = function () {
       OpenFB.login('email,user_friends,user_about_me').then(function () {
         OpenFB.get('/me').success(function (result) {
@@ -45049,19 +45066,30 @@ angular.module('userModule').controller('LoginController', [
           user.FbId = result.id;
           user.FbToken = window.localStorage.fbtoken;
           user.Email = result.email;
-          user.Password = 'canch';
+          user.Password = 'cancha';
           user.$fbLogin().then(function () {
-            alert('Registrado!');
+            getToken(user);
           }, function (response) {
-            alert(response.data.Message);
+            getToken(user);
           });
-          $location.path('/clubs/home');
         }).error(function (data) {
           $scope.hide();
           alert(data.error.message);
         });
       }, function () {
         alert('OpenFB login failed');
+      });
+    };
+    var getToken = function (user) {
+      var headers = { 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8' };
+      var usert = {};
+      usert.email = user.Email;
+      usert.grant_type = 'password';
+      usert.password = user.Password;
+      $http.post('http://altacancha.azurewebsites.net/Token', 'username=' + user.Email + '&password=' + user.Password + '&grant_type=password', { headers: headers }).success(function (response) {
+        $scope.$storage.token = response.access_token;
+        $http.defaults.headers.common = { 'Authentication': 'Bearer ' + response.access_token };
+        $state.go('clubs.home');
       });
     };
   }
@@ -45085,15 +45113,28 @@ angular.module('userModule').config([
   '$stateProvider',
   function ($stateProvider) {
     $stateProvider.state('user.match', {
-      url: '/match',
+      url: '/match/:id',
       templateUrl: 'user/userMatch.tpl.html',
-      controller: 'userMatchController'
+      controller: 'userMatchController',
+      resolve: {
+        club: [
+          'Clubs',
+          '$stateParams',
+          function (Clubs, $stateParams) {
+            return Clubs.get({ id: $stateParams.id }).$promise;
+          }
+        ]
+      }
     });
   }
 ]);
 angular.module('userModule').controller('userMatchController', [
   '$scope',
-  function ($scope) {
+  'club',
+  function ($scope, club) {
+    $scope.showSearchBox = false;
+    $scope.club = club;
+    $scope.$storage.club = $scope.club;
   }
 ]);
 angular.module('userService', ['ngResource']);
@@ -45152,11 +45193,11 @@ angular.module("clubs/clubsBooking.tpl.html", []).run(["$templateCache", functio
     "    </ion-header-bar>\n" +
     "    <ion-content has-bouncing=\"true\">\n" +
     "        <div class=\"search-box\" ng-show=\"showSearchBox\">\n" +
-    "            <h1 class=\"padding\">Buscar canchas</h1>\n" +
+    "            <h1 class=\"padding\">Reserva tu cancha en</h1>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
-    "                        <input type=\"date\" placeholder=\"Fecha\"/>\n" +
+    "                        <input ng-model=\"search.date\" type=\"date\" placeholder=\"Fecha\"/>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "                <div class=\"col col-33\">\n" +
@@ -45164,21 +45205,20 @@ angular.module("clubs/clubsBooking.tpl.html", []).run(["$templateCache", functio
     "                        <div class=\"input-label\">\n" +
     "                            Horario\n" +
     "                        </div>\n" +
-    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\">\n" +
-    "                            <option ng-repeat=\"t in [1,2,3,4]\" value=\"{{t}}\">{{t}}</option>\n" +
-    "                        </select>\n" +
+    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\" ng-model=\"search.hour\" ng-options=\"hou for hou in hours\"\n" +
+    "                                class=\"form-control kill-border-radius\"></select>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
-    "                        <input type=\"text\" placeholder=\"Barrio\"/>\n" +
+    "                        <input ng-model=\"name\" type=\"text\" placeholder=\"Nombre\"/>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "                <div class=\"col col-33\">\n" +
-    "                    <button class=\"button button-full\">\n" +
-    "                        Buscar\n" +
+    "                    <button ng-click=\"search(name)\" class=\"button button-full\">\n" +
+    "                        <i class=\"icon ion-search\"></i>\n" +
     "                    </button>\n" +
     "                </div>\n" +
     "            </div>\n" +
@@ -45234,11 +45274,11 @@ angular.module("clubs/clubsDetail.tpl.html", []).run(["$templateCache", function
     "    </ion-header-bar>\n" +
     "    <ion-content has-bouncing=\"true\">\n" +
     "        <div class=\"search-box\" ng-show=\"showSearchBox\">\n" +
-    "            <h1 class=\"padding\">Buscar canchas</h1>\n" +
+    "            <h1 class=\"padding\">Reserva tu cancha en</h1>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
-    "                        <input type=\"date\" placeholder=\"Fecha\"/>\n" +
+    "                        <input ng-model=\"search.date\" type=\"date\" placeholder=\"Fecha\"/>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "                <div class=\"col col-33\">\n" +
@@ -45246,21 +45286,20 @@ angular.module("clubs/clubsDetail.tpl.html", []).run(["$templateCache", function
     "                        <div class=\"input-label\">\n" +
     "                            Horario\n" +
     "                        </div>\n" +
-    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\">\n" +
-    "                            <option ng-repeat=\"t in [1,2,3,4]\" value=\"{{t}}\">{{t}}</option>\n" +
-    "                        </select>\n" +
+    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\" ng-model=\"search.hour\" ng-options=\"hou for hou in hours\"\n" +
+    "                                class=\"form-control kill-border-radius\"></select>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
-    "                        <input type=\"text\" placeholder=\"Barrio\"/>\n" +
+    "                        <input ng-model=\"name\" type=\"text\" placeholder=\"Nombre\"/>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "                <div class=\"col col-33\">\n" +
-    "                    <button class=\"button button-full\">\n" +
-    "                        Buscar\n" +
+    "                    <button ng-click=\"search(name)\" class=\"button button-full\">\n" +
+    "                        <i class=\"icon ion-search\"></i>\n" +
     "                    </button>\n" +
     "                </div>\n" +
     "            </div>\n" +
@@ -45330,7 +45369,7 @@ angular.module("clubs/clubsHome.tpl.html", []).run(["$templateCache", function($
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
-    "                        <input type=\"date\" placeholder=\"Fecha\"/>\n" +
+    "                        <input ng-model=\"search.date\" type=\"date\" placeholder=\"Fecha\"/>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "                <div class=\"col col-33\">\n" +
@@ -45338,20 +45377,19 @@ angular.module("clubs/clubsHome.tpl.html", []).run(["$templateCache", function($
     "                        <div class=\"input-label\">\n" +
     "                            Horario\n" +
     "                        </div>\n" +
-    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\">\n" +
-    "                            <option ng-repeat=\"t in [1,2,3,4]\" value=\"{{t}}\">{{t}}</option>\n" +
-    "                        </select>\n" +
+    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\" ng-model=\"search.hour\" ng-options=\"hou for hou in hours\"\n" +
+    "                                class=\"form-control kill-border-radius\"></select>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
-    "                        <input type=\"text\" placeholder=\"Barrio\"/>\n" +
+    "                        <input ng-model=\"name\" type=\"text\" placeholder=\"Nombre\"/>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "                <div class=\"col col-33\">\n" +
-    "                    <button class=\"button button-full\">\n" +
+    "                    <button ng-click=\"search(name)\" class=\"button button-full\">\n" +
     "                        <i class=\"icon ion-search\"></i>\n" +
     "                    </button>\n" +
     "                </div>\n" +
@@ -45363,8 +45401,8 @@ angular.module("clubs/clubsHome.tpl.html", []).run(["$templateCache", function($
     "        <ul class=\"list-canchas\">\n" +
     "\n" +
     "            <!-- finalizados con opacity de 0.5 :: VER ESTADO ( FINALIZADO, POR CONFIRMAR, CONFIRMADO ) -->\n" +
-    "            <a ng-repeat=\"club in clubs\" ui-sref=\"clubs.detail({ id: club.Id })\" class=\"item-cancha\">\n" +
-    "                <img class=\"item-cancha-img\" ng-src=\"{{club.HeaderPhoto.Src}}\" alt=\"CANCHA_NOMBRE\"/>\n" +
+    "            <a ng-repeat=\"club in clubs\" ui-sref=\"user.match({ id: club.Id })\" class=\"item-cancha\">\n" +
+    "                <img class=\"item-cancha-img\" ng-src=\"{{club.HeaderPhoto.Src}}\" alt=\"{{club.Name}}\"/>\n" +
     "                <div class=\"item-cancha-overlay\">\n" +
     "                    <h5 class=\"nombre padding-horizontal\">{{club.Name}}</h5>\n" +
     "                    <h6 class=\"direccion padding-horizontal\" >{{club.Address}}</h6>\n" +
@@ -45401,7 +45439,7 @@ angular.module("clubs/clubsResults.tpl.html", []).run(["$templateCache", functio
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
-    "                        <input type=\"date\" placeholder=\"Fecha\"/>\n" +
+    "                        <input ng-model=\"search.date\" type=\"date\" placeholder=\"Fecha\"/>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "                <div class=\"col col-33\">\n" +
@@ -45409,20 +45447,19 @@ angular.module("clubs/clubsResults.tpl.html", []).run(["$templateCache", functio
     "                        <div class=\"input-label\">\n" +
     "                            Horario\n" +
     "                        </div>\n" +
-    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\">\n" +
-    "                            <option ng-repeat=\"t in [1,2,3,4]\" value=\"{{t}}\">{{t}}</option>\n" +
-    "                        </select>\n" +
+    "                        <select class=\"\" name=\"hourPicker\" id=\"hourPicker\" ng-model=\"search.hour\" ng-options=\"hou for hou in hours\"\n" +
+    "                                class=\"form-control kill-border-radius\"></select>\n" +
     "                    </div>\n" +
     "                </div>\n" +
     "            </div>\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
-    "                        <input type=\"text\" placeholder=\"Barrio\"/>\n" +
+    "                        <input ng-model=\"name\" type=\"text\" placeholder=\"Nombre\"/>\n" +
     "                    </label>\n" +
     "                </div>\n" +
     "                <div class=\"col col-33\">\n" +
-    "                    <button class=\"button button-full\">\n" +
+    "                    <button ng-click=\"search(name)\" class=\"button button-full\">\n" +
     "                        <i class=\"icon ion-search\"></i>\n" +
     "                    </button>\n" +
     "                </div>\n" +
@@ -45434,8 +45471,8 @@ angular.module("clubs/clubsResults.tpl.html", []).run(["$templateCache", functio
     "        <ul class=\"list-canchas\">\n" +
     "\n" +
     "            <!-- finalizados con opacity de 0.5 :: VER ESTADO ( FINALIZADO, POR CONFIRMAR, CONFIRMADO ) -->\n" +
-    "            <a ng-repeat=\"club in clubs\" ui-sref=\"clubs.detail\" class=\"item-cancha\">\n" +
-    "                <img class=\"item-cancha-img\" ng-src=\"{{club.HeaderPhoto.Src}}\" alt=\"CANCHA_NOMBRE\"/>\n" +
+    "            <a ng-repeat=\"club in clubs\" ui-sref=\"clubs.detail({id:club.Id})\" class=\"item-cancha\">\n" +
+    "                <img class=\"item-cancha-img\" ng-src=\"{{club.HeaderPhoto.Src}}\" alt=\"{{club.Name}}\"/>\n" +
     "                <div class=\"item-cancha-overlay\">\n" +
     "                    <h5 class=\"nombre padding-horizontal\">{{club.Name}}</h5>\n" +
     "                    <h6 class=\"direccion padding-horizontal\" >{{club.Address}}</h6>\n" +
@@ -45454,26 +45491,15 @@ angular.module("sidebar.tpl.html", []).run(["$templateCache", function($template
     "<ion-side-menu ng-controller=\"sidebarController\" side=\"left\">\n" +
     "    <ion-header-bar class=\"bar-dark bar-altacancha\">\n" +
     "        <h1 class=\"title\">Menú</h1>\n" +
-    "        <!--<button class=\"button button-icon ion-plus\" ng-click=\"newProject()\">\n" +
-    "        </button>-->\n" +
     "    </ion-header-bar>\n" +
     "    <ion-content class=\"sidebar-content\" scroll=\"false\">\n" +
     "        <ion-list>\n" +
-    "            <!--<ion-item ng-repeat=\"project in projects\" ng-click=\"selectProject(project, $index)\" ng-class=\"{active: activeProject == project}\">\n" +
-    "                {{project.title}}\n" +
-    "            </ion-item>-->\n" +
     "            <ion-item ng-repeat=\"item in items\" ng-click=\"toggleSideBar()\" ui-sref-active=\"active\" ui-sref=\"{{item.state}}\">\n" +
     "                {{item.name}}\n" +
     "            </ion-item>\n" +
-    "            <!--<ion-item ui-sref-active=\"active\" ui-sref=\"userHome\">\n" +
-    "                Perfil\n" +
+    "            <ion-item ng-click=\"logout()\" ui-sref-active=\"active\" ui-sref=\"user.login\">\n" +
+    "                Logout\n" +
     "            </ion-item>\n" +
-    "            <ion-item ui-sref-active=\"active\" ui-sref=\"clubsHome\">\n" +
-    "                Tus Partidos\n" +
-    "            </ion-item>\n" +
-    "            <ion-item ui-sref-active=\"active\" ui-sref=\"userHome\">\n" +
-    "                Canchas Favoritas\n" +
-    "            </ion-item>-->\n" +
     "        </ion-list>\n" +
     "    </ion-content>\n" +
     "</ion-side-menu>");
