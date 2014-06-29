@@ -53,11 +53,11 @@
         <ul class="list-canchas">
 
             <!-- finalizados con opacity de 0.5 :: VER ESTADO ( FINALIZADO, POR CONFIRMAR, CONFIRMADO ) -->
-            <a ng-repeat="t in [1,2,3,4,5]" ui-sref="clubs.detail" class="item-cancha">
-                <img class="item-cancha-img" src="assets/img/canchas/cancha-1-thumb-1.jpg" alt="CANCHA_NOMBRE"/>
+            <a ng-repeat="club in clubs" ui-sref="clubs.detail" class="item-cancha">
+                <img class="item-cancha-img" ng-src="{{club.HeaderPhoto.Src}}" alt="CANCHA_NOMBRE"/>
                 <div class="item-cancha-overlay">
-                    <h5 class="nombre padding-horizontal">NOMBRE_CANCHA</h5>
-                    <h6 class="direccion padding-horizontal" >DIRECCION_CANCHA</h6>
+                    <h5 class="nombre padding-horizontal">{{club.Name}}</h5>
+                    <h6 class="direccion padding-horizontal" >{{club.Address}}</h6>
                     <div class="precio">Finalizado</div>
                 </div>
             </a>

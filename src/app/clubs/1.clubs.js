@@ -1,5 +1,5 @@
 angular.module('clubsModule', [
-    //'clubsService'
+    'clubsService'
 ]);
 
 angular.module('clubsModule').config(['$stateProvider', function ($stateProvider) {
