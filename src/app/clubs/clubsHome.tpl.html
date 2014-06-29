@@ -7,23 +7,60 @@
         <img src="http://iconos.gratis.es/iconos/deportes/balones-y-pelotas/futbol.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()" />
         <h1 class="title">Alta cancha</h1>
         <!-- New Task button-->
-        <button class="button button-icon button-search" ng-click="showSearchBox = !showSearchBox ">
+        <button class="button button-icon button-search" ng-click="toggleSearchBox()">
             <i class="icon ion-search"></i>
         </button>
         <button class="button button-icon" ng-click="newTask()">
             <i class="icon ion-location"></i>
         </button>
     </ion-header-bar>
-    <ion-content scroll="false">
-        <div class="search-box" ng-show = showSearchBox fade-in>
-            <h2 class="title">Buscar canchas</h2>
+    <ion-content has-bouncing="true">
+        <div class="search-box">
+            <h1 class="padding">Buscar canchas</h1>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="date" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <div class="item item-input item-select">
+                        <div class="input-label">
+                            Horario
+                        </div>
+                        <select class="" name="hourPicker" id="hourPicker">
+                            <option ng-repeat="t in [1,2,3,4]" value="{{t}}">{{t}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="text" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <button class="button button-full button-positive">
+                        Buscar
+                    </button>
+                </div>
+            </div>
         </div>
-        <!--<ion-list>
-            <ion-item ng-repeat="task in activeProject.tasks">
-                {{task.title}}
-            </ion-item>
-        </ion-list>-->
-        <div class="col50">asd</div>
-        <div class="col50">asd</div>
+        <div class="padding-horizontal">
+            <h4>Últimas reservas</h4>
+        </div>
+        <ul class="list-canchas">
+
+            <a ng-repeat="t in [1,2,3,4,5]" href="#" class="item-cancha">
+                <img class="item-cancha-img" src="assets/img/canchas/cancha-1-thumb-1.jpg" alt="CANCHA_NOMBRE"/>
+                <div class="item-cancha-overlay">
+                    <h5 class="nombre padding-horizontal">NOMBRE_CANCHA</h5>
+                    <h6 class="direccion padding-horizontal" >DIRECCION_CANCHA</h6>
+                    <div class="precio">400$</div>
+                </div>
+            </a>
+
+        </ul>
     </ion-content>
 </ion-side-menu-content>
