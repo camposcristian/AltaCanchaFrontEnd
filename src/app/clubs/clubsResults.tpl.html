@@ -1,0 +1,67 @@
+<!-- Center content -->
+<ion-side-menu-content>
+    <ion-header-bar class="bar-dark bar-altacancha">
+        <button class="button button-icon menu-icon" ng-click="toggleSideBar()">
+            <i class="icon ion-navicon"></i>
+        </button>
+        <img class="altacancha-logo" src="assets/img/alta-cancha-logo.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()" />
+        <h1 class="title">Alta cancha</h1>
+        <!-- New Task button-->
+        <button class="button button-icon button-search" ng-click="showSearchBox = !showSearchBox">
+            <i class="icon ion-plus"></i>
+        </button>
+        <button class="button button-icon" ng-click="newTask()">
+            <i class="icon ion-location"></i>
+        </button>
+    </ion-header-bar>
+    <ion-content has-bouncing="true">
+        <div class="search-box" ng-show="showSearchBox">
+            <h1 class="padding">Reserva tu cancha en</h1>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="date" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <div class="item item-input item-select">
+                        <div class="input-label">
+                            Horario
+                        </div>
+                        <select class="" name="hourPicker" id="hourPicker">
+                            <option ng-repeat="t in [1,2,3,4]" value="{{t}}">{{t}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="text" placeholder="Barrio"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <button class="button button-full">
+                        <i class="icon ion-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="padding-horizontal">
+            <h4>Resultados de búsqueda</h4>
+        </div>
+        <ul class="list-canchas">
+
+            <!-- finalizados con opacity de 0.5 :: VER ESTADO ( FINALIZADO, POR CONFIRMAR, CONFIRMADO ) -->
+            <a ng-repeat="club in clubs" ui-sref="clubs.detail" class="item-cancha">
+                <img class="item-cancha-img" ng-src="{{club.HeaderPhoto.Src}}" alt="CANCHA_NOMBRE"/>
+                <div class="item-cancha-overlay">
+                    <h5 class="nombre padding-horizontal">{{club.Name}}</h5>
+                    <h6 class="direccion padding-horizontal" >{{club.Address}}</h6>
+                    <div class="precio">Finalizado</div>
+                </div>
+            </a>
+
+        </ul>
+    </ion-content>
+</ion-side-menu-content>
