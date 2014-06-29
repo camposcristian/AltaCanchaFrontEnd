@@ -8,6 +8,7 @@ angular.module('clubsModule').config(['$stateProvider', function ($stateProvider
 
 angular.module('clubsModule').controller('clubsDetailController', function ($scope) {
 
+    $scope.showSearchBox = false;
 
 });
 
