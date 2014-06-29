@@ -14,16 +14,79 @@
             <i class="icon ion-location"></i>
         </button>
     </ion-header-bar>
-    <ion-content scroll="false">
+    <ion-content has-bouncing="true">
         <div class="search-box">
-            <h2 class="title">Buscar canchas</h2>
+            <h1 class="padding">Buscar canchas</h1>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="date" placeholder="Fecha"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <div class="item item-input item-select">
+                        <div class="input-label">
+                            Horario
+                        </div>
+                        <select class="" name="hourPicker" id="hourPicker">
+                            <option ng-repeat="t in [1,2,3,4]" value="{{t}}">{{t}}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-67">
+                    <label class="item item-input">
+                        <input type="text" placeholder="Barrio"/>
+                    </label>
+                </div>
+                <div class="col col-33">
+                    <button class="button button-full">
+                        Buscar
+                    </button>
+                </div>
+            </div>
         </div>
-        <!--<ion-list>
-            <ion-item ng-repeat="task in activeProject.tasks">
-                {{task.title}}
-            </ion-item>
-        </ion-list>-->
-        <div class="col50">asd</div>
-        <div class="col50">asd</div>
+
+
+        <div class="row">
+            <h4 class="padding-horizontal">CANCHA_NOMBRE</h4>
+        </div>
+
+        <div class="tabs tabs-canchas">
+            <a class="tab-item">
+                Cancha #1
+            </a>
+            <a class="tab-item">
+                Cancha #2
+            </a>
+            <a class="tab-item">
+                Cancha #3
+            </a>
+            <a class="tab-item">
+                Cancha #4
+            </a>
+        </div>
+
+        <div class="sliderDiv"><img src="assets/img/canchas/cancha-1-thumb-c-2.jpg" alt="ACA VA EL SLIDER"/></div>
+
+        <div class="row cancha-horarios">
+            <button class="col">18:30</button>
+            <button class="col active">19:00</button>
+            <button class="col taken">19:30</button>
+            <button class="col">20:00</button>
+            <button class="col">20:30</button>
+        </div>
+
+        <div class="padding cancha-descripcion">
+            Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 50
+        </div>
+
+        <div class="cancha-reservar padding">
+            <button class="button button-block button-positive">
+                Reservar cancha
+            </button>
+        </div>
+
     </ion-content>
 </ion-side-menu-content>
