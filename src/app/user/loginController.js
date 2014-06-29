@@ -6,12 +6,17 @@ angular.module('userModule').config(['$stateProvider', function ($stateProvider)
     });
 }]);
 
-angular.module('userModule').controller('LoginController',["$scope", "OpenFB", "Users", "$window", "$state", function ($scope, OpenFB, Users, $window, $state) {
+
+angular.module('userModule').controller('LoginController', ["$scope", "OpenFB", "Users", "$window", "$state", "$http", function ($scope, OpenFB, Users, $window, $state, $http) {
 
 
 
     //Redirect if logged in
-    if($window.localStorage['fbtoken']){
+    if ($window.localStorage['fbtoken']) {
+        $http.defaults.headers.common =
+        {
+            "Authentication": "Bearer " + $scope.$storage.token
+        };
         $state.go('clubs.home');
     }
 
@@ -27,40 +32,44 @@ angular.module('userModule').controller('LoginController',["$scope", "OpenFB", "
                         user.Email = result.email;
                         user.Password = "cancha";
                         user.$fbLogin().then(
-                            function(){
+                            function () {
                                 //alert("Registrado!");
-                                //getToken();
+                                getToken(user);
                             },
-                            function(response){
+                            function (response) {
                                 //alert(response.data.Message);
                                 //alert("Fallo registro");
+                                getToken(user);
                             }
                         );
-                        $state.go("clubs.home");
+
                     })
-                    .error(function(data) {
+                    .error(function (data) {
                         $scope.hide();
                         alert(data.error.message);
                     });
             },
             function () {
+
                 alert('OpenFB login failed');
             });
     };
+    var getToken = function (user) {
+        var headers = {"Content-Type": 'application/x-www-form-urlencoded; charset=UTF-8'};
+        var usert = {};
+        usert.email = user.Email;
+        usert.grant_type = "password";
+        usert.password = user.Password;
 
-    var getToken = function () {
-        var user = new Users();
-        user.$token().then(
-            function(response){
-                //alert("Registrado!");
-                $scope.$storage.token = response;
-                //TODO: Registrar interceptor
-            },
-            function(response){
-                //alert(response.data.Message);
-                //alert("Fallo registro");
-            }
-        )
+        $http.post('http://altacancha.azurewebsites.net/Token', "username="+user.Email+"&password="+user.Password+"&grant_type=password", {headers: headers}).success(function (response) {
+            $scope.$storage.token = response.access_token;
+            $http.defaults.headers.common =
+            {
+                "Authentication": "Bearer " + response.access_token
+            };
+            $state.go("clubs.home");
+
+        });
     };
 
 }]);

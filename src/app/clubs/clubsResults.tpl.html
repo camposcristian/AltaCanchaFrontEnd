@@ -20,7 +20,7 @@
             <div class="row">
                 <div class="col col-67">
                     <label class="item item-input">
-                        <input type="date" placeholder="Fecha"/>
+                        <input ng-model="search.date" type="date" placeholder="Fecha"/>
                     </label>
                 </div>
                 <div class="col col-33">
@@ -28,20 +28,19 @@
                         <div class="input-label">
                             Horario
                         </div>
-                        <select class="" name="hourPicker" id="hourPicker">
-                            <option ng-repeat="t in [1,2,3,4]" value="{{t}}">{{t}}</option>
-                        </select>
+                        <select class="" name="hourPicker" id="hourPicker" ng-model="search.hour" ng-options="hou for hou in hours"
+                                class="form-control kill-border-radius"></select>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col col-67">
                     <label class="item item-input">
-                        <input type="text" placeholder="Barrio"/>
+                        <input ng-model="name" type="text" placeholder="Nombre"/>
                     </label>
                 </div>
                 <div class="col col-33">
-                    <button class="button button-full">
+                    <button ng-click="search(name)" class="button button-full">
                         <i class="icon ion-search"></i>
                     </button>
                 </div>
@@ -53,7 +52,7 @@
         <ul class="list-canchas">
 
             <!-- finalizados con opacity de 0.5 :: VER ESTADO ( FINALIZADO, POR CONFIRMAR, CONFIRMADO ) -->
-            <a ng-repeat="club in clubs" ui-sref="clubs.detail" class="item-cancha">
+            <a ng-repeat="club in clubs" ui-sref="clubs.detail({id:club.Id})" class="item-cancha">
                 <img class="item-cancha-img" ng-src="{{club.HeaderPhoto.Src}}" alt="CANCHA_NOMBRE"/>
                 <div class="item-cancha-overlay">
                     <h5 class="nombre padding-horizontal">{{club.Name}}</h5>

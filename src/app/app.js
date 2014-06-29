@@ -22,10 +22,10 @@ angular.module('alta-cancha-app', [
         });
     })
 
-    .run(["OpenFB", "FB_APP_ID", "$rootScope", "$window" ,function (OpenFB, FB_APP_ID, $rootScope, $window) {
+    .run(["OpenFB", "FB_APP_ID", "$rootScope", "$window" , function (OpenFB, FB_APP_ID, $rootScope, $window) {
         /*ezfbProvider.setInitParams({
-            appId: FB_APP_ID
-        });*/
+         appId: FB_APP_ID
+         });*/
 
         //Para el Browser
         OpenFB.init(FB_APP_ID, false, "http://localhost/alta-cancha-hack/build/oauthcallback.html", window.localStorage);
@@ -33,16 +33,6 @@ angular.module('alta-cancha-app', [
         //Para El celu
         //OpenFB.init(FB_APP_ID, true);
 
-        /*$rootScope.$on('$stateChangeStart', function(event, toState) {
-            if (toState.name !== "user.login" && !$window.sessionStorage['fbtoken']) {
-                $state.go('user.login');
-                event.preventDefault();
-            }
-        });
-
-        $rootScope.$on('OAuthException', function() {
-            $state.go('user.login');
-        });*/
     }])
 
     .config(['$urlRouterProvider', '$locationProvider', function ($urlRouterProvider, $locationProvider) {
@@ -50,7 +40,7 @@ angular.module('alta-cancha-app', [
         $urlRouterProvider.otherwise("/user/login");
     }])
 
-    .controller('AppController', ["$scope", "$ionicSideMenuDelegate", "$localStorage", "httpRequestTracker", function ($scope, $ionicSideMenuDelegate, $localStorage, httpRequestTracker) {
+    .controller('AppController', ["$scope", "$ionicSideMenuDelegate", "$localStorage", "httpRequestTracker", "$state", "Clubs", function ($scope, $ionicSideMenuDelegate, $localStorage, httpRequestTracker, $state, Clubs) {
         $scope.toggleSideBar = function () {
             $ionicSideMenuDelegate.toggleLeft();
         };
@@ -59,6 +49,21 @@ angular.module('alta-cancha-app', [
         $scope.hasPendingRequests = function () {
             return httpRequestTracker.hasPendingRequests();
         };
+
+        $scope.search = function (name) {
+            Clubs.query({name: name}).$promise.then( function (response) {
+                $scope.$storage.results = response;
+                if($state.current.name == "clubs.results"){
+                    $state.reload();
+                }
+                $state.go("clubs.results");
+
+            });
+        };
+
+        $scope.hours = [
+            16, 17, 18, 19, 20
+        ];
 
     }]);
 

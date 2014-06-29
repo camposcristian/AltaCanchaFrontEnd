@@ -13,11 +13,11 @@
     </ion-header-bar>
     <ion-content has-bouncing="true">
         <div class="search-box" ng-show="showSearchBox">
-            <h1 class="padding">Buscar canchas</h1>
+            <h1 class="padding">Reserva tu cancha en</h1>
             <div class="row">
                 <div class="col col-67">
                     <label class="item item-input">
-                        <input type="date" placeholder="Fecha"/>
+                        <input ng-model="search.date" type="date" placeholder="Fecha"/>
                     </label>
                 </div>
                 <div class="col col-33">
@@ -25,21 +25,20 @@
                         <div class="input-label">
                             Horario
                         </div>
-                        <select class="" name="hourPicker" id="hourPicker">
-                            <option ng-repeat="t in [1,2,3,4]" value="{{t}}">{{t}}</option>
-                        </select>
+                        <select class="" name="hourPicker" id="hourPicker" ng-model="search.hour" ng-options="hou for hou in hours"
+                                class="form-control kill-border-radius"></select>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col col-67">
                     <label class="item item-input">
-                        <input type="text" placeholder="Barrio"/>
+                        <input ng-model="name" type="text" placeholder="Nombre"/>
                     </label>
                 </div>
                 <div class="col col-33">
-                    <button class="button button-full">
-                        Buscar
+                    <button ng-click="search(name)" class="button button-full">
+                        <i class="icon ion-search"></i>
                     </button>
                 </div>
             </div>

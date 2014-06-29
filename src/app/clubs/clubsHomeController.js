@@ -11,10 +11,11 @@ angular.module('clubsModule').config(['$stateProvider', function ($stateProvider
     });
 }]);
 
-angular.module('clubsModule').controller('clubsHomeController', function ($scope, clubs) {
+angular.module('clubsModule').controller('clubsHomeController', function ($scope, clubs, Clubs, $state) {
 
     $scope.showSearchBox = false;
     $scope.clubs = clubs;
+
 
 
 });
