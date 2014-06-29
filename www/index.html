@@ -1,0 +1,47 @@
+<!doctype html>
+<html ng-app="alta-cancha-app" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Alta Cancha</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+
+    <!-- compiled CSS -->
+    <link rel="stylesheet" type="text/css" href="assets/alta-cancha-0.0.1.css"/>
+    
+
+    <!-- compiled JavaScript -->
+    <script type="text/javascript" src="assets/alta-cancha-0.0.1.js"></script>
+    
+    <script type="text/javascript" src="assets/alta-canchac.js"></script>
+    
+
+    <!-- 404 during development -->
+    <script src="cordova.js"></script>
+
+</head>
+<body ng-controller="AppController">
+
+<!-- Loader -->
+<div class="loaderWrapper" ng-show="hasPendingRequests()">
+    <!--<img src="/assets/img/spinner.gif">-->
+    <div id="facebookG">
+        <div class="facebookBlocks">
+            <div id="blockG_1" class="facebook_blockG"></div>
+            <div id="blockG_2" class="facebook_blockG"></div>
+            <div id="blockG_3" class="facebook_blockG"></div>
+        </div>
+    </div>
+</div>
+
+<ion-side-menus>
+
+    <ion-nav-view id="main"></ion-nav-view>
+
+
+    <div ng-include="'sidebar.tpl.html'"></div>
+
+
+
+</ion-side-menus>
+</body>
+</html>

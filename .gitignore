@@ -1,7 +1,6 @@
 *.sw*
 *~
 build/
-/www/
 node_modules/
 .idea
 .sass-cache/
