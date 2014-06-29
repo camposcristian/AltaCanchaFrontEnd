@@ -9,6 +9,7 @@ angular.module('clubsModule').config(['$stateProvider', function ($stateProvider
 angular.module('clubsModule').controller('clubsBookingController', function ($scope) {
 
     $scope.showSearchBox = false;
+    $scope.court = $scope.$storage.court;
 
 
 });
