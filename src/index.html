@@ -18,6 +18,20 @@
 
 </head>
 <body ng-controller="AppController">
+
+<!-- Loader -->
+<div class="loaderWrapper" ng-show="hasPendingRequests()">
+    <!--<img src="/assets/img/spinner.gif">-->
+    <div id="facebookG">
+        <div class="facebookBlocks">
+            <div id="blockG_1" class="facebook_blockG"></div>
+            <div id="blockG_2" class="facebook_blockG"></div>
+            <div id="blockG_3" class="facebook_blockG"></div>
+        </div>
+        <div class="text">Cargando...</div>
+    </div>
+</div>
+
 <ion-side-menus>
 
     <ion-nav-view id="main"></ion-nav-view>

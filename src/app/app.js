@@ -9,6 +9,7 @@ angular.module('alta-cancha-app', [
 
         'templates-app',
         'templates-common',
+        'services.httpRequestTracker',
 
         'sidebarModule',
         'clubsModule',
@@ -49,11 +50,15 @@ angular.module('alta-cancha-app', [
         $urlRouterProvider.otherwise("/user/login");
     }])
 
-    .controller('AppController', ["$scope", "$ionicSideMenuDelegate", "$localStorage", function ($scope, $ionicSideMenuDelegate, $localStorage) {
+    .controller('AppController', ["$scope", "$ionicSideMenuDelegate", "$localStorage", "httpRequestTracker", function ($scope, $ionicSideMenuDelegate, $localStorage, httpRequestTracker) {
         $scope.toggleSideBar = function () {
             $ionicSideMenuDelegate.toggleLeft();
         };
         $scope.$storage = $localStorage;
+
+        $scope.hasPendingRequests = function () {
+            return httpRequestTracker.hasPendingRequests();
+        };
 
     }]);
 
