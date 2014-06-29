@@ -6,7 +6,8 @@ angular.module('userModule').config(['$stateProvider', function ($stateProvider)
     });
 }]);
 
-angular.module('userModule').controller('LoginController',["$scope", "OpenFB", "Users", "$location", function ($scope, OpenFB, Users, $location) {
+angular.module('userModule').controller('LoginController',["$scope", "OpenFB", "Users", "$location", "$window", "$state", function ($scope, OpenFB, Users, $location, $window, $state) {
+
 
     /*$scope.fbLogin = function () {
         alert("asd");
@@ -26,11 +27,39 @@ angular.module('userModule').controller('LoginController',["$scope", "OpenFB", "
         });
     };*/
 
+    //Redirect if logged in
+    /*if($window.localStorage['fbtoken']){
+        $state.go('clubs.home');
+    }*/
+
     $scope.fbLogin = function () {
-        OpenFB.login('email,user_friends').then(
+        OpenFB.login('email,user_friends,user_about_me').then(
             function () {
-                //alert("entro");
-                $location.path('/clubs/home');
+                OpenFB.get('/me')
+                    .success(function (result) {
+                        $scope.$storage.fbUser = result;
+                        var user = new Users();
+                        user.FbId = result.id;
+                        user.FbToken = window.localStorage.fbtoken;
+                        user.Email = result.email;
+                        user.Password = "canch";
+                        user.$fbLogin().then(
+                            function(){
+                                alert("Registrado!");
+                            },
+                            function(response){
+                                alert(response.data.Message);
+                                //alert("Fallo registro");
+                            }
+
+                        );
+                        $location.path('/clubs/home');
+                    })
+                    .error(function(data) {
+                        $scope.hide();
+                        alert(data.error.message);
+                    });
+
             },
             function () {
                 alert('OpenFB login failed');

@@ -27,7 +27,8 @@ angular.module('alta-cancha-app', [
         });*/
 
         //Para el Browser
-//OpenFB.init(FB_APP_ID, false, "http://localhost/alta-cancha-hack/build/oauthcallback.html", window.localStorage);
+        //OpenFB.init(FB_APP_ID, false, "http://localhost/alta-cancha-hack/build/oauthcallback.html", window.localStorage);
+
         //Para El celu
         OpenFB.init(FB_APP_ID, true);
 
@@ -48,10 +49,12 @@ angular.module('alta-cancha-app', [
         $urlRouterProvider.otherwise("/user/login");
     }])
 
-    .controller('AppController', ["$scope", "$ionicSideMenuDelegate", function ($scope, $ionicSideMenuDelegate) {
+    .controller('AppController', ["$scope", "$ionicSideMenuDelegate", "$localStorage", function ($scope, $ionicSideMenuDelegate, $localStorage) {
         $scope.toggleSideBar = function () {
             $ionicSideMenuDelegate.toggleLeft();
         };
+        $scope.$storage = $localStorage;
+
     }]);
 
 
