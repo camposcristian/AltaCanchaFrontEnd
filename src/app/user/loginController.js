@@ -6,31 +6,14 @@ angular.module('userModule').config(['$stateProvider', function ($stateProvider)
     });
 }]);
 
-angular.module('userModule').controller('LoginController',["$scope", "OpenFB", "Users", "$location", "$window", "$state", function ($scope, OpenFB, Users, $location, $window, $state) {
+angular.module('userModule').controller('LoginController',["$scope", "OpenFB", "Users", "$window", "$state", function ($scope, OpenFB, Users, $window, $state) {
 
 
-    /*$scope.fbLogin = function () {
-        alert("asd");
-        ezfb.login(null, {scope: 'email,user_likes'}).then(function (response) {
-            console.log(response);
-            var user = new Users();
-            console.log(user);
-            user.fbId = response.authResponse.userID;
-            user.fbToken = response.authResponse.accessToken;
-
-            //deferred = $q.defer();
-            alert("FB ID: " + user.fbId);
-            *//*user.$fbLogin().then(
-                alert("true"),
-                alert("false")
-            );*//*
-        });
-    };*/
 
     //Redirect if logged in
-    /*if($window.localStorage['fbtoken']){
+    if($window.localStorage['fbtoken']){
         $state.go('clubs.home');
-    }*/
+    }
 
     $scope.fbLogin = function () {
         OpenFB.login('email,user_friends,user_about_me').then(
@@ -42,28 +25,42 @@ angular.module('userModule').controller('LoginController',["$scope", "OpenFB", "
                         user.FbId = result.id;
                         user.FbToken = window.localStorage.fbtoken;
                         user.Email = result.email;
-                        user.Password = "canch";
+                        user.Password = "cancha";
                         user.$fbLogin().then(
                             function(){
-                                alert("Registrado!");
+                                //alert("Registrado!");
+                                //getToken();
                             },
                             function(response){
-                                alert(response.data.Message);
+                                //alert(response.data.Message);
                                 //alert("Fallo registro");
                             }
-
                         );
-                        $location.path('/clubs/home');
+                        $state.go("clubs.home");
                     })
                     .error(function(data) {
                         $scope.hide();
                         alert(data.error.message);
                     });
-
             },
             function () {
                 alert('OpenFB login failed');
             });
+    };
+
+    var getToken = function () {
+        var user = new Users();
+        user.$token().then(
+            function(response){
+                //alert("Registrado!");
+                $scope.$storage.token = response;
+                //TODO: Registrar interceptor
+            },
+            function(response){
+                //alert(response.data.Message);
+                //alert("Fallo registro");
+            }
+        )
     };
 
 }]);
