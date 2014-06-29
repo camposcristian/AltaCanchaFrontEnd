@@ -40,10 +40,11 @@ angular.module('openfb', [])
          * @param redirectURL - The OAuth redirect URL. Optional. If not provided, we use sensible defaults.
          * @param store - The store used to save the Facebook token. Optional. If not provided, we use sessionStorage.
          */
-        function init(appId, redirectURL, store) {
+        function init(appId, cordova, redirectURL, store) {
             fbAppId = appId;
             if (redirectURL) oauthRedirectURL = redirectURL;
             if (store) tokenStore = store;
+            runningInCordova = cordova;
         }
 
         /**
