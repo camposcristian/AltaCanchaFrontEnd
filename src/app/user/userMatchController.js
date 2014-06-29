@@ -14,5 +14,5 @@ angular.module('userModule').config(['$stateProvider', function ($stateProvider)
 angular.module('userModule').controller('userMatchController', function ($scope, club) {
     $scope.showSearchBox = false;
     $scope.club = club;
-    $scope.$storage.club = $scope.club;
+    $scope.$storage.match = $scope.club;
 });

@@ -44684,7 +44684,7 @@ angular.module('alta-cancha-app', [
   '$rootScope',
   '$window',
   function (OpenFB, FB_APP_ID, $rootScope, $window) {
-    OpenFB.init(FB_APP_ID, false, 'http://localhost/alta-cancha-hack/build/oauthcallback.html', window.localStorage);
+    OpenFB.init(FB_APP_ID, true);
   }
 ]).config([
   '$urlRouterProvider',
@@ -44825,8 +44825,14 @@ angular.module('clubsModule').config([
 ]);
 angular.module('clubsModule').controller('clubsConfirmationController', [
   '$scope',
-  function ($scope) {
+  '$state',
+  '$sce',
+  function ($scope, $state, $sce) {
     $scope.showSearchBox = false;
+    $scope.src = $sce.trustAsResourceUrl($scope.$storage.pay.url);
+    $scope.avisar = function () {
+      $state.go('user.match', { id: $scope.$storage.booking.Match.Id });
+    };
   }
 ]);
 angular.module('clubsModule').config([
@@ -45240,7 +45246,7 @@ angular.module('userModule').controller('userMatchController', [
   function ($scope, club) {
     $scope.showSearchBox = false;
     $scope.club = club;
-    $scope.$storage.club = $scope.club;
+    $scope.$storage.match = $scope.club;
   }
 ]);
 angular.module('userService', ['ngResource']);
@@ -45371,7 +45377,8 @@ angular.module("clubs/clubsConfirmation.tpl.html", []).run(["$templateCache", fu
     "        <button class=\"button button-icon menu-icon\" ng-click=\"toggleSideBar()\">\n" +
     "            <i class=\"icon ion-navicon\"></i>\n" +
     "        </button>\n" +
-    "        <img class=\"altacancha-logo\" src=\"assets/img/alta-cancha-logo.png\" width=\"24\" height=\"24\" alt=\"Logo Alta Cancha\" ng-click=\"toggleSideBar()\" />\n" +
+    "        <img class=\"altacancha-logo\" src=\"assets/img/alta-cancha-logo.png\" width=\"24\" height=\"24\" alt=\"Logo Alta Cancha\" ng-click=\"toggleSideBar()\"/>\n" +
+    "\n" +
     "        <h1 class=\"title\">Detalle de tu reserva</h1>\n" +
     "        <!-- New Task button-->\n" +
     "        <button class=\"button button-icon button-search\" ng-click=\"showSearchBox = !showSearchBox\">\n" +
@@ -45381,6 +45388,7 @@ angular.module("clubs/clubsConfirmation.tpl.html", []).run(["$templateCache", fu
     "    <ion-content has-bouncing=\"true\">\n" +
     "        <div class=\"search-box\" ng-show=\"showSearchBox\">\n" +
     "            <h1 class=\"padding\">Reserva tu cancha en</h1>\n" +
+    "\n" +
     "            <div class=\"row\">\n" +
     "                <div class=\"col col-67\">\n" +
     "                    <label class=\"item item-input\">\n" +
@@ -45417,16 +45425,18 @@ angular.module("clubs/clubsConfirmation.tpl.html", []).run(["$templateCache", fu
     "        </div>\n" +
     "\n" +
     "        <div class=\"booking-club-name\">\n" +
-    "            <h4 class=\"padding-horizontal\">Listo! Ya hiciste tu reserva!</h4>\n" +
+    "            <h4 class=\"padding-horizontal\">Listo! Ya hiciste tu reserva! en {{$storage.club.name}}</h4>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"row padding-horizontal booking-buy-button\">\n" +
-    "            <button class=\"button button-block button-dark\">\n" +
+    "            <button ng-click=\"avisar()\" class=\"button button-block button-dark\">\n" +
     "                Avisale a tus amigos\n" +
     "            </button>\n" +
     "        </div>\n" +
     "\n" +
-    "        <iframe ng-src=\"{{$storage.pay.url}}\"></iframe>\n" +
+    "        <div style=\"position: relative;\">\n" +
+    "            <iframe frameborder='0' height='150px' width='480px' ng-src=\"{{src}}\" style=\"osition:absolute;top:0;left:0;width:100%; height:100%;\"></iframe>\n" +
+    "        </div>\n" +
     "\n" +
     "    </ion-content>\n" +
     "</ion-side-menu-content>");
@@ -45766,15 +45776,15 @@ angular.module("user/userMatch.tpl.html", []).run(["$templateCache", function($t
     "        </div>\n" +
     "\n" +
     "        <div class=\"booking-club-name\">\n" +
-    "            <h4 class=\"padding-horizontal\">CANCHA_NOMBRE</h4>\n" +
+    "            <h4 class=\"padding-horizontal\">{{$storage.club.Name}}</h4>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"booking-club-court\">\n" +
-    "            <h5 class=\"padding-horizontal\">CANCHA_NUMBER</h5>\n" +
+    "            <h5 class=\"padding-horizontal\">{{$storage.court.Name}}</h5>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"booking-club-date\">\n" +
-    "            <p class=\"padding-horizontal\">CANCHA_FECHA - CANCHA_HORA</p>\n" +
+    "            <p class=\"padding-horizontal\">{{$storage.booking.Match.DateTimeIn}}</p>\n" +
     "        </div>\n" +
     "\n" +
     "        <div class=\"list match-friendlist\">\n" +

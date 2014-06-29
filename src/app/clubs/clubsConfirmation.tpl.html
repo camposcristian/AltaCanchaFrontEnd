@@ -4,7 +4,8 @@
         <button class="button button-icon menu-icon" ng-click="toggleSideBar()">
             <i class="icon ion-navicon"></i>
         </button>
-        <img class="altacancha-logo" src="assets/img/alta-cancha-logo.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()" />
+        <img class="altacancha-logo" src="assets/img/alta-cancha-logo.png" width="24" height="24" alt="Logo Alta Cancha" ng-click="toggleSideBar()"/>
+
         <h1 class="title">Detalle de tu reserva</h1>
         <!-- New Task button-->
         <button class="button button-icon button-search" ng-click="showSearchBox = !showSearchBox">
@@ -14,6 +15,7 @@
     <ion-content has-bouncing="true">
         <div class="search-box" ng-show="showSearchBox">
             <h1 class="padding">Reserva tu cancha en</h1>
+
             <div class="row">
                 <div class="col col-67">
                     <label class="item item-input">
@@ -50,16 +52,18 @@
         </div>
 
         <div class="booking-club-name">
-            <h4 class="padding-horizontal">Listo! Ya hiciste tu reserva!</h4>
+            <h4 class="padding-horizontal">Listo! Ya hiciste tu reserva! en {{$storage.club.name}}</h4>
         </div>
 
         <div class="row padding-horizontal booking-buy-button">
-            <button class="button button-block button-dark">
+            <button ng-click="avisar()" class="button button-block button-dark">
                 Avisale a tus amigos
             </button>
         </div>
 
-        <iframe ng-src="{{$storage.pay.url}}"></iframe>
+        <div style="position: relative;">
+            <iframe frameborder='0' height='150px' width='480px' ng-src="{{src}}" style="osition:absolute;top:0;left:0;width:100%; height:100%;"></iframe>
+        </div>
 
     </ion-content>
 </ion-side-menu-content>
