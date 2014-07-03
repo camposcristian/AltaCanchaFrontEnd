@@ -44684,7 +44684,7 @@ angular.module('alta-cancha-app', [
   '$rootScope',
   '$window',
   function (OpenFB, FB_APP_ID, $rootScope, $window) {
-    OpenFB.init(FB_APP_ID, true);
+    OpenFB.init(FB_APP_ID, false, 'http://localhost/alta-cancha-hack/build/oauthcallback.html', window.localStorage);
   }
 ]).config([
   '$urlRouterProvider',
