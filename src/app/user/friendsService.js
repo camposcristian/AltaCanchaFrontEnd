@@ -4,6 +4,8 @@ angular.module('friendsService').factory('Friends', ['$resource', 'ESCAPED_SERVE
     var resource = $resource(ESCAPED_SERVER_URL + '/Friend/:id/', {
         id: '@id'
     }, {
+        'query':  {method:'GET', isArray:true, cache: true},
+        'get':    {method:'GET', cache: true}
     });
 
     return resource;

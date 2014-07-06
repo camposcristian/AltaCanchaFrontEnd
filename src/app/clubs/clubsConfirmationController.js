@@ -6,14 +6,29 @@ angular.module('clubsModule').config(['$stateProvider', function ($stateProvider
     });
 }]);
 
-angular.module('clubsModule').controller('clubsConfirmationController', function ($scope, $state, $sce) {
+angular.module('clubsModule').controller('clubsConfirmationController', function ($scope, $state, $sce, $ionicModal, Friends) {
 
     $scope.showSearchBox = false;
 
     $scope.src = $sce.trustAsResourceUrl($scope.$storage.pay.url);
 
+    $ionicModal.fromTemplateUrl('clubs/friendsPicker.tpl.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function (modal) {
+            $scope.modal = modal;
+        });
+
     $scope.avisar = function () {
-        $state.go("user.match", {id: $scope.$storage.booking.Match.Id});
+        //$state.go("user.match", {id: $scope.$storage.booking.Match.Id});
+        $scope.friends = Friends.query();
+
+        $scope.modal.show();
+    };
+
+    $scope.saveFriends = function () {
+        //$state.go("user.match", {id: $scope.$storage.booking.Match.Id});
+        $scope.modal.hide();
     };
 
 });

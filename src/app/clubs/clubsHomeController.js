@@ -13,7 +13,7 @@ angular.module('clubsModule').config(['$stateProvider', function ($stateProvider
 
 angular.module('clubsModule').controller('clubsHomeController', function ($scope, matches) {
 
-    $scope.showSearchBox = false;
+    $scope.showSearchBox = true;
     $scope.matches = matches;
 
 
