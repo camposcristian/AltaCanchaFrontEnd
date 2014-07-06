@@ -44684,7 +44684,7 @@ angular.module('alta-cancha-app', [
   '$rootScope',
   '$window',
   function (OpenFB, FB_APP_ID, $rootScope, $window) {
-    OpenFB.init(FB_APP_ID, true);
+    OpenFB.init(FB_APP_ID, false, 'http://localhost/alta-cancha-hack/build/oauthcallback.html', window.localStorage);
   }
 ]).config([
   '$urlRouterProvider',
@@ -45202,7 +45202,17 @@ angular.module('matchesService').factory('Matches', [
   '$resource',
   'ESCAPED_SERVER_URL',
   function ($resource, ESCAPED_SERVER_URL) {
-    var resource = $resource(ESCAPED_SERVER_URL + '/Match/:id/', { id: '@id' }, {});
+    var resource = $resource(ESCAPED_SERVER_URL + '/Match/:id/', { id: '@id' }, {
+        'query': {
+          method: 'GET',
+          isArray: true,
+          cache: true
+        },
+        'get': {
+          method: 'GET',
+          cache: true
+        }
+      });
     return resource;
   }
 ]);
